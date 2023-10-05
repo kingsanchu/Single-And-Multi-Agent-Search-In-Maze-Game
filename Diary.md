@@ -8,3 +8,6 @@ Met my supervisor Eduard for the first time, he gave me a lot of advise on how t
 
 Doing readings on Single-Agent and Multi-agent, choosing readings for the project plan.
 
+# 4/10
+
+Setting objectives on the project plan with pathfinding algorithms, finalising work.
