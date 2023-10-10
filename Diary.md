@@ -10,4 +10,9 @@ Doing readings on Single-Agent and Multi-agent, choosing readings for the projec
 
 # 4/10
 
-Setting objectives on the project plan with pathfinding algorithms, finalising work.
+Setting objectives on the project plan with pathfinding algorithms, finalising project plan.
+
+# 10/10
+
+Started on building the maze's base code while researching for methods and Unity.
+
