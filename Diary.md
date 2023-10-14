@@ -16,3 +16,6 @@ Setting objectives on the project plan with pathfinding algorithms, finalising p
 
 Started on building the maze's base code while researching for methods and Unity.
 
+# 14/10
+
+Researching for methods to build the environment
