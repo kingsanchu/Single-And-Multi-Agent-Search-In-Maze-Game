@@ -32,3 +32,11 @@ class Maze:
             return True
         return False
 
+#Example of an open path and walls in a maze
+maze_data = [
+    [0, 0, 1, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 0, 1, 1],
+    [1, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0]
+]
