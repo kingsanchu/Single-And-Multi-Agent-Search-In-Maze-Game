@@ -18,8 +18,10 @@ class Maze:
     #Representing the maze configuration
     def __init__(self, maze_data):
         self.maze_data = maze_data
+        self.rows = len(maze_data)
+        self.cols = len(maze_data[0])
         self.start_position = (0,0)
-        self.end_position = (4,4)
+        self.end_position = (self.rows -1, self.cols -1)
     
     #Check if the player can move on to the next coordinate
     def check_move(self, player):
