@@ -1,6 +1,6 @@
 # @author Steven CHU
 
-class player:
+class Player:
     # Record if the player or cell visited the coordinates or not.
     def __init__(self, x, y):
         self.x = x
@@ -23,6 +23,10 @@ class Maze:
     
     #Check if the player can move on to the next coordinate
     def check_move(self, player):
+
+         #Creating player
+        player = Player(0, 0)
+
         next_x, next_y = player.x + 1,  player.y
         #Check if the next coordinate is blocked by a wall
         if next_x < len(self.maze_data) and next_y < len(self.maze_data) and self.maze_data[next_x][next_y] == 0:
@@ -40,3 +44,12 @@ maze_data = [
     [1, 1, 0, 0, 0],
     [0, 0, 0, 1, 0]
 ]
+
+#Creating a maze
+maze = Maze(maze_data)
+
+#Creating player
+player = Player(0, 0)
+
+#Check if the player has visited the coordinates
+maze.check_move(player) 
