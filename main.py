@@ -24,19 +24,25 @@ class Maze:
         self.end_position = (self.rows -1, self.cols -1)
     
     #Check if the player can move on to the next coordinate
-    def check_move(self, player):
+    def check_move(self, player, direction):
 
-         #Creating player
-        player = Player(0, 0)
+         #Creating player coordinate
+        x, y = player.x, player.y
 
-        next_x, next_y = player.x + 1,  player.y
-        #Check if the next coordinate is blocked by a wall
-        if next_x < len(self.maze_data) and next_y < len(self.maze_data) and self.maze_data[next_x][next_y] == 0:
-            player.x = next_x
-            player.y = next_y
-            player.visited = True
-            return True
-        return False
+        if direction == 'up' and x > 0 and self.maze_data[x-1][y] == 0:
+            player.x -= 1
+        elif direction == 'down' and x < self.rows - 1 and self.maze_data[x+1][y] == 0 :
+            player.x += 1
+        elif direction == 'left' and y > 0 - 1 and self.maze_data[x][y-1] == 0 :
+            player.y -= 1
+        elif direction == 'right' and y < self.rows - 1 and self.maze_data[x][y+1] == 0 :
+            player.y += 1
+        else:
+            print("Invalid direction. Please retry.")
+            return False
+
+        player.visited = True
+        return True
 
 #Example of an open path and walls in a maze
 maze_data = [
