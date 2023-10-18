@@ -19,3 +19,7 @@ Started on building the maze's base code while researching for methods and Unity
 # 14/10
 
 Researching for methods to build the environment
+
+# 18/10
+
+Constructing the basic environment for the maze
