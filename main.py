@@ -47,7 +47,26 @@ class Maze:
     #When player is at the ending path
     def at_end(self, player):
         return(player.x, player.y) == self.end_position
-
+    
+    #Visualisation in the maze
+    def visualise(self, player):
+        for i in range(self, player):
+            for j in range(self.cols):
+                if (i,j) == self.start_position:
+                    print('S', end = ' ')
+                elif (i, j) == self.end_position:
+                    print('E', end=' ')
+                elif self.maze_data[i][j] == 0:
+                    if player.x == i and player.y == j:
+                        print('P', end = ' ')
+                    else:
+                        print('.', end = ' ')
+                else: 
+                    print('.', end = ' ')
+            else:
+                print('#', end = ' ')
+        print()
+                
 #Example of an open path and walls in a maze
 maze_data = [
     [0, 0, 1, 0, 0],
