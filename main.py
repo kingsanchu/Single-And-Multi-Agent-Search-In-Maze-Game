@@ -83,7 +83,7 @@ maze = Maze(maze_data)
 player = Player(0, 0)
 
 #Check if the player has visited the coordinates
-maze.check_move(player) 
+maze.check_move(player, direction) 
 
 while not maze.at_end(player):
     maze.visualise(player)
