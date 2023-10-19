@@ -46,7 +46,7 @@ class Maze:
     
     #When player is at the ending path
     def at_end(self, player):
-        return(playeplayer.y) == self.end_position
+        return(player.x, player.y) == self.end_position
 
 #Example of an open path and walls in a maze
 maze_data = [
