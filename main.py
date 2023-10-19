@@ -33,7 +33,7 @@ class Maze:
             player.x -= 1
         elif direction == 'down' and x < self.rows - 1 and self.maze_data[x+1][y] == 0 :
             player.x += 1
-        elif direction == 'left' and y > 0 - 1 and self.maze_data[x][y-1] == 0 :
+        elif direction == 'left' and y > 0 and self.maze_data[x][y-1] == 0 :
             player.y -= 1
         elif direction == 'right' and y < self.rows - 1 and self.maze_data[x][y+1] == 0 :
             player.y += 1
@@ -50,7 +50,7 @@ class Maze:
     
     #Visualisation in the maze
     def visualise(self, player):
-        for i in range(self, player):
+        for i in range(self.rows):
             for j in range(self.cols):
                 if (i,j) == self.start_position:
                     print('S', end = ' ')
