@@ -82,9 +82,6 @@ maze = Maze(maze_data)
 #Creating player
 player = Player(0, 0)
 
-#Check if the player has visited the coordinates
-maze.check_move(player, direction) 
-
 while not maze.at_end(player):
     maze.visualise(player)
     direction = input("Enter a direction (Left, Right, Up, Down): ").lower()
