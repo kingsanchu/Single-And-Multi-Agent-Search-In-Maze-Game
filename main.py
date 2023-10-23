@@ -79,7 +79,7 @@ maze_data = [
 #Creating a maze
 maze = Maze(maze_data)
 
-#Creating player
+#Creating player position
 player = Player(0, 0)
 
 while not maze.at_end(player):
