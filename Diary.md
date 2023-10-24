@@ -27,3 +27,7 @@ Constructing the basic environment for the maze.
 # 21/10
 
 Test running in terminal to see if code is running.
+
+# 23/10 
+
+Researching for A* search implementation
