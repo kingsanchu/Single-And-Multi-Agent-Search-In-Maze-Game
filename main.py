@@ -1,5 +1,7 @@
 # @author Steven CHU
 
+import heapq
+
 class Player:
     # Record if the player or cell visited the coordinates or not.
     def __init__(self, x, y):
@@ -23,6 +25,13 @@ class Maze:
         self.start_position = (0,0)
         self.end_position = (self.rows -1, self.cols -1)
     
+    #A* search implementation
+    def a_star_search(self, start, end):
+        emptyset = [] 
+        visited = set()
+        starting_node = Node(start, 0, self.heuristic(start, end))
+        heapq.heappush(emptyset,  starting_node)
+         
     #Check if the player can move on to the next coordinate
     def check_move(self, player, direction):
 
