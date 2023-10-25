@@ -16,6 +16,17 @@ class Player:
         else:
             print("Player has not visited the coordinates.")
 
+    #Class Node checks the cost of the search
+    class Node:
+        def __init__(self, position, g_cost, h_cost):
+            self.position = position
+            self.g_cost = g_cost
+            self.h_cost = h_cost
+            self.f_cost = g_cost + h_cost
+        
+        def __lt__(self, other):
+            return (self.f_cost < other.f_cost)
+
 class Maze:
     #Representing the maze configuration
     def __init__(self, maze_data):
@@ -27,10 +38,12 @@ class Maze:
     
     #A* search implementation
     def a_star_search(self, start, end):
-        emptyset = [] 
+        empty_set = [] 
         visited = set()
         starting_node = Node(start, 0, self.heuristic(start, end))
-        heapq.heappush(emptyset,  starting_node)
+        heapq.heappush(empty_set,  starting_node)
+
+        while empty_set:
          
     #Check if the player can move on to the next coordinate
     def check_move(self, player, direction):
