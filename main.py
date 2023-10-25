@@ -25,7 +25,7 @@ class Player:
             self.f_cost = g_cost + h_cost
         
         def __lt__(self, other):
-            return (self.f_cost < other.f_cost)
+            return self.f_cost < other.f_cost
 
 class Maze:
     #Representing the maze configuration
