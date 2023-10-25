@@ -44,6 +44,24 @@ class Maze:
         heapq.heappush(empty_set,  starting_node)
 
         while empty_set:
+            current = heapq.heappop(empty_set)
+
+            if current.position == end :
+                return self.reconstruct_path(start, end, current)
+            
+        visited.add(current.position)
+
+        for neighbor in self.get_neighbor(current.position):
+            if neighbor in visited:
+                continue
+
+            g_cost = current.g_cost + 1
+            h_cost = self.heuristic(neighbor, end)
+            neighbor_node = Node(neighbor, g_cost, h_cost)
+
+            if neighbor_node not in empty_set:
+                heapq.heappush(empty_set, neighbor_node)
+
          
     #Check if the player can move on to the next coordinate
     def check_move(self, player, direction):
