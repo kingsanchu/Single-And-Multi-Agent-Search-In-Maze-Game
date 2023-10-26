@@ -31,3 +31,7 @@ Test running in terminal to see if code is running.
 # 23/10 
 
 Researching for A* search implementation
+
+# 26/10
+
+Ideas for reconstructing project structure
