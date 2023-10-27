@@ -62,6 +62,22 @@ class Maze:
             if neighbor_node not in empty_set:
                 heapq.heappush(empty_set, neighbor_node)
 
+    #Check if the neighbors is an obstacle 
+    def get_neighbor(self, position):
+        x, y = position
+        neighbors = []
+        if x > 0 and self.maze_data[x-1][y] == 0:
+            neighbors.append((x-1, y))
+        if x < self.rows - 1 and self.maze_data[x+1][y] == 0
+            neighbors.append((x+1, y))
+        if y > 0 and self.maze_data[x][y-1] == 0:
+            neighbors.append((x, y-1))
+        if y < self.rows - 1 and self.maze_data[x][y+1] == 0
+            neighbors.append((x, y+1))
+        
+        return neighbors
+
+
          
     #Check if the player can move on to the next coordinate
     def check_move(self, player, direction):
