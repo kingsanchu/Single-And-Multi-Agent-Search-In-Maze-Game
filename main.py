@@ -17,12 +17,12 @@ class Player:
             print("Player has not visited the coordinates.")
 
     #Class Node checks the cost of the search
-    class Node:
-        def __init__(self, position, g_cost, h_cost):
-            self.position = position
-            self.g_cost = g_cost
-            self.h_cost = h_cost
-            self.f_cost = g_cost + h_cost
+class Node:
+    def __init__(self, position, g_cost, h_cost):
+        self.position = position
+        self.g_cost = g_cost
+        self.h_cost = h_cost
+        self.f_cost = g_cost + h_cost
         
         def __lt__(self, other):
             return self.f_cost < other.f_cost
