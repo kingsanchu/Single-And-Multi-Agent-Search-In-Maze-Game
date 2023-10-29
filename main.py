@@ -68,11 +68,11 @@ class Maze:
         neighbors = []
         if x > 0 and self.maze_data[x-1][y] == 0:
             neighbors.append((x-1, y))
-        if x < self.rows - 1 and self.maze_data[x+1][y] == 0
+        if x < self.rows - 1 and self.maze_data[x+1][y] == 0:
             neighbors.append((x+1, y))
         if y > 0 and self.maze_data[x][y-1] == 0:
             neighbors.append((x, y-1))
-        if y < self.rows - 1 and self.maze_data[x][y+1] == 0
+        if y < self.rows - 1 and self.maze_data[x][y+1] == 0:
             neighbors.append((x, y+1))
         
         return neighbors
