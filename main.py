@@ -167,9 +167,18 @@ maze = Maze(maze_data)
 #Creating player position
 player = Player(0, 0)
 
-while not maze.at_end(player):
-    maze.visualise(player)
-    direction = input("Enter a direction (Left, Right, Up, Down): ").lower()
-    maze.check_move(player, direction)
+path = maze.find_path()
 
-print("Congrats! You have reached the end of the maze! ")
+if path:
+    print("Path found : " , path)
+else:
+    print("No Path Found")
+
+#Old code not being tested
+
+#while not maze.at_end(player):
+ #   maze.visualise(player)
+  #  direction = input("Enter a direction (Left, Right, Up, Down): ").lower()
+   # maze.check_move(player, direction)
+
+#print("Congrats! You have reached the end of the maze! ")
