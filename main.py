@@ -76,8 +76,6 @@ class Maze:
             neighbors.append((x, y+1))
         
         return neighbors
-
-
          
     #Check if the player can move on to the next coordinate
     def check_move(self, player, direction):
@@ -122,7 +120,38 @@ class Maze:
             else:
                 print('#', end = ' ')
         print()
-                
+
+    def find_path(self):
+        start = self.start_position
+        end = self.end_position
+        empty_set = []
+        visited = set()
+        starting_node = Node(start, 0, self.heuristic(start, end))
+        heapq.heappush(empty_set, starting_node)
+        
+        while empty_set:
+            current = heapq.heappop(empty_set)
+
+            if current.position == end:
+                return self.reconstruct_path(start, end, current)
+            
+            visited.add(current.position)
+
+            for neighbor in self.get_neighbor(current.position):
+                if neighbor in visited:
+                    continue
+
+                g_cost = current.g_cost+1
+                h_cost = self.heuristic(neighbor, end)
+                neighbor_node = Node(neighbor, g_cost, h_cost)
+
+                if neighbor_node not in empty_set:
+                    heapq.heappush(empty_set, neighbor_node)
+                    
+        return None
+
+
+
 #Example of an open path and walls in a maze
 maze_data = [
     [0, 0, 1, 0, 0],
