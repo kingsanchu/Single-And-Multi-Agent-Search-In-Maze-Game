@@ -2,6 +2,16 @@
 
 import heapq
 
+class Node:
+    def __init__(self, position, g_cost, h_cost):
+        self.position = position
+        self.g_cost = g_cost
+        self.h_cost = h_cost
+        self.f_cost = g_cost + h_cost
+        
+    def __lt__(self, other):
+        return self.f_cost < other.f_cost
+
 class Player:
     # Record if the player or cell visited the coordinates or not.
     def __init__(self, x, y):
@@ -17,15 +27,6 @@ class Player:
             print("Player has not visited the coordinates.")
 
     #Class Node checks the cost of the search
-class Node:
-    def __init__(self, position, g_cost, h_cost):
-        self.position = position
-        self.g_cost = g_cost
-        self.h_cost = h_cost
-        self.f_cost = g_cost + h_cost
-        
-        def __lt__(self, other):
-            return self.f_cost < other.f_cost
 
 class Maze:
     #Representing the maze configuration
@@ -36,6 +37,57 @@ class Maze:
         self.start_position = (0,0)
         self.end_position = (self.rows -1, self.cols -1)
     
+    def find_path(self):
+        start = self.start_position
+        end = self.end_position
+        empty_set = []
+        visited = set()
+        starting_node = Node(start, 0, self.heuristic(start, end))
+        heapq.heappush(empty_set, starting_node)
+        came_from={}
+
+        while empty_set:
+            current = heapq.heappop(empty_set)
+
+            if current.position == end:
+                return self.reconstruct_path(start, end, current, came_from)
+            
+            visited.add(current.position)
+
+            for neighbor in self.get_neighbor(current.position):
+                if neighbor in visited:
+                    continue
+
+                g_cost = current.g_cost+1
+                h_cost = self.heuristic(neighbor, end)
+                neighbor_node = Node(neighbor, g_cost, h_cost)
+                came_from[neighbor_node] = current
+
+                if neighbor_node not in empty_set:
+                    heapq.heappush(empty_set, neighbor_node)
+                    
+        return None
+
+
+
+    
+    def position(self, node):
+        return node.position
+    
+    def reconstruct_path(self, start, end, current, came_from):
+        path = []
+        while current.position != start:
+            path.append(current.position)
+            current = came_from[current]
+        path.append(start)
+        path.reverse()
+        return path
+    
+    def heuristic(self, position, end):
+        x1, y1 = position
+        x2, y2 = end
+        return abs(x1 - x2) + abs(y1 - y2)
+
     #A* search implementation
     def a_star_search(self, start, end):
         empty_set = [] 
@@ -120,38 +172,7 @@ class Maze:
             else:
                 print('#', end = ' ')
         print()
-
-    def find_path(self):
-        start = self.start_position
-        end = self.end_position
-        empty_set = []
-        visited = set()
-        starting_node = Node(start, 0, self.heuristic(start, end))
-        heapq.heappush(empty_set, starting_node)
         
-        while empty_set:
-            current = heapq.heappop(empty_set)
-
-            if current.position == end:
-                return self.reconstruct_path(start, end, current)
-            
-            visited.add(current.position)
-
-            for neighbor in self.get_neighbor(current.position):
-                if neighbor in visited:
-                    continue
-
-                g_cost = current.g_cost+1
-                h_cost = self.heuristic(neighbor, end)
-                neighbor_node = Node(neighbor, g_cost, h_cost)
-
-                if neighbor_node not in empty_set:
-                    heapq.heappush(empty_set, neighbor_node)
-                    
-        return None
-
-
-
 #Example of an open path and walls in a maze
 maze_data = [
     [0, 0, 1, 0, 0],
@@ -173,12 +194,3 @@ if path:
     print("Path found : " , path)
 else:
     print("No Path Found")
-
-#Old code not being tested
-
-#while not maze.at_end(player):
- #   maze.visualise(player)
-  #  direction = input("Enter a direction (Left, Right, Up, Down): ").lower()
-   # maze.check_move(player, direction)
-
-#print("Congrats! You have reached the end of the maze! ")
