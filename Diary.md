@@ -35,3 +35,7 @@ Researching for A* search implementation
 # 26/10
 
 Ideas for reconstructing project structure
+
+# 29/10
+
+Successfully run the maze in A* Search
