@@ -19,15 +19,6 @@ class Player:
         self.y = y
         self.visited = False 
 
-    #Check if player visited the coordinates.
-    def check_visited(self):
-        if self.visited:
-            print("Player has visited the corrdinates.")
-        else:
-            print("Player has not visited the coordinates.")
-
-    #Class Node checks the cost of the search
-
 class Maze:
     #Representing the maze configuration
     def __init__(self, maze_data):
@@ -36,8 +27,22 @@ class Maze:
         self.cols = len(maze_data[0])
         self.start_position = (0,0)
         self.end_position = (self.rows -1, self.cols -1)
+
+    def heuristic(self, position, end):
+        x1, y1 = position
+        x2, y2 = end
+        return abs(x1 - x2) + abs(y1 - y2)
     
-    def find_path(self):
+    def reconstruct_path(self, start, end, current, came_from): 
+        path = []
+        while current.position != start:
+            path.append(current.position)
+            current = came_from[current]
+        path.append(start)
+        path.reverse()
+        return path
+
+    def find_path_a_star(self):
         start = self.start_position
         end = self.end_position
         empty_set = []
@@ -67,23 +72,6 @@ class Maze:
                     heapq.heappush(empty_set, neighbor_node)
                     
         return None
-
-    def position(self, node):
-        return node.position
-    
-    def reconstruct_path(self, start, end, current, came_from):
-        path = []
-        while current.position != start:
-            path.append(current.position)
-            current = came_from[current]
-        path.append(start)
-        path.reverse()
-        return path
-    
-    def heuristic(self, position, end):
-        x1, y1 = position
-        x2, y2 = end
-        return abs(x1 - x2) + abs(y1 - y2)
 
     #A* search implementation
     def a_star_search(self, start, end):
@@ -151,30 +139,40 @@ class Maze:
     def at_end(self, player):
         return(player.x, player.y) == self.end_position
     
-    #Visualisation in the maze
-    def visualise(self, player):
-        for i in range(self.rows):
-            for j in range(self.cols):
-                if (i,j) == self.start_position:
-                    print('S', end = ' ')
-                elif (i, j) == self.end_position:
-                    print('E', end=' ')
-                elif self.maze_data[i][j] == 0:
-                    if player.x == i and player.y == j:
-                        print('P', end = ' ')
-                    else:
-                        print('.', end = ' ')
-                else: 
-                    print('.', end = ' ')
+    def choose_algorithm(self):
+        while True:
+            choice = input("Type 1 for A* Search, or 2 for Alpha-Beta Pruning in the Maze : ")
+            if choice == '1':
+                return self.find_path_a_star()
+            elif choice == '2':
+                return self.find_path_alpha_beta()
             else:
-                print('#', end = ' ')
-        print()
+                print("Invalid input, please Type 1 for A* Search, or 2 for Alpha-Beta Pruning in the Maze :")
+                
+    #Visualisation in the maze
+    #def visualise(self, player):
+     #   for i in range(self.rows):
+      #      for j in range(self.cols):
+       #         if (i,j) == self.start_position:
+        #            print('S', end = ' ')
+         #       elif (i, j) == self.end_position:
+          #          print('E', end=' ')
+           #     elif self.maze_data[i][j] == 0:
+            #        if player.x == i and player.y == j:
+             #           print('P', end = ' ')
+              #      else:
+               #         print('.', end = ' ')
+                #else: 
+                 #   print('.', end = ' ')
+            #else:
+             #   print('#', end = ' ')
+        #print()
         
 #Example of an open path and walls in a maze
 maze_data = [
-    [0, 0, 1, 0, 0],
-    [0, 1, 0, 1, 0],
-    [0, 0, 0, 1, 1],
+    [0, 1, 1, 0, 1],
+    [0, 0, 1, 1, 0],
+    [1, 0, 0, 1, 1],
     [1, 1, 0, 0, 0],
     [0, 0, 0, 1, 0]
 ]
@@ -185,7 +183,7 @@ maze = Maze(maze_data)
 #Creating player position
 player = Player(0, 0)
 
-path = maze.find_path()
+path = maze.find_path_a_star()
 
 if path:
     print("Path found : " , path)
