@@ -68,9 +68,6 @@ class Maze:
                     
         return None
 
-
-
-    
     def position(self, node):
         return node.position
     
