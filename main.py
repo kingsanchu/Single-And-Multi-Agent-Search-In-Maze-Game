@@ -42,6 +42,8 @@ class Maze:
         path.reverse()
         return path
 
+# A* Search Algorithm
+
     def find_path_a_star(self):
         start = self.start_position
         end = self.end_position
@@ -73,7 +75,6 @@ class Maze:
                     
         return None
 
-    #A* search implementation
     def a_star_search(self, start, end):
         empty_set = [] 
         visited = set()
@@ -138,16 +139,6 @@ class Maze:
     #When player is at the ending path
     def at_end(self, player):
         return(player.x, player.y) == self.end_position
-    
-    def choose_algorithm(self):
-        while True:
-            choice = input("Type 1 for A* Search, or 2 for Alpha-Beta Pruning in the Maze : ")
-            if choice == '1':
-                return self.find_path_a_star()
-            elif choice == '2':
-                return self.find_path_alpha_beta()
-            else:
-                print("Invalid input, please Type 1 for A* Search, or 2 for Alpha-Beta Pruning in the Maze :")
                 
     #Visualisation in the maze
     #def visualise(self, player):
