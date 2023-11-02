@@ -28,6 +28,11 @@ class Maze:
         self.start_position = (0,0)
         self.end_position = (self.rows -1, self.cols -1)
 
+    def heuristic(self, position, end):
+        x1, y1 = position
+        x2, y2 = end
+        return abs(x1 - x2) + abs(y1 - y2)
+    
     def reconstruct_path(self, start, end, current, came_from): 
         path = []
         while current.position != start:
@@ -36,31 +41,13 @@ class Maze:
         path.append(start)
         path.reverse()
         return path
-    
-    #2 heuristic functions :
 
-    def heuristic_manhattan(self, position, end):
-        x1, y1 = position
-        x2, y2 = end
-        return abs(x1 - x2) + abs(y1 - y2)
-    
-    def heuristic_euclidean(self, position, end):
-        x1, y1 = position
-        x2, y2 = end
-        return ((x1 - x2) ** 2 + (y1 - y2) ** 2) **0.5
-    
-    heuristic_fucntions = [heuristic_manhattan, heuristic_euclidean]
-
-    for heuristic in heuristic_fucntions:
-        print(f"Using {heuristic.__name__} heuristic: ")
-
-#A* Search algorithms
-    def find_path_a_star(self, heuristic_function):
+    def find_path_a_star(self):
         start = self.start_position
         end = self.end_position
         empty_set = []
         visited = set()
-        starting_node = Node(start, 0, heuristic_function(start, end))
+        starting_node = Node(start, 0, self.heuristic(start, end))
         heapq.heappush(empty_set, starting_node)
         came_from={}
 
@@ -77,7 +64,7 @@ class Maze:
                     continue
 
                 g_cost = current.g_cost+1
-                h_cost == heuristic_function(neighbor, end)
+                h_cost = self.heuristic(neighbor, end)
                 neighbor_node = Node(neighbor, g_cost, h_cost)
                 came_from[neighbor_node] = current
 
@@ -86,10 +73,11 @@ class Maze:
                     
         return None
 
+    #A* search implementation
     def a_star_search(self, start, end):
         empty_set = [] 
         visited = set()
-        starting_node = Node(start, 0, self.heuristic_manhattan(start, end))
+        starting_node = Node(start, 0, self.heuristic(start, end))
         heapq.heappush(empty_set,  starting_node)
 
         while empty_set:
@@ -105,57 +93,11 @@ class Maze:
                 continue
 
             g_cost = current.g_cost + 1
-            h_cost = self.heuristic_manhattan(neighbor, end)
+            h_cost = self.heuristic(neighbor, end)
             neighbor_node = Node(neighbor, g_cost, h_cost)
 
             if neighbor_node not in empty_set:
                 heapq.heappush(empty_set, neighbor_node)
-
-#Alpha-beta Pruning algorithms
-    def alpha_beta_search(self, node, depth, alpha, beta, maximizing_player):
-        if depth == 0 or self.at_end(node):  # Replace with your end condition
-            return self.heuristic_manhattan(node.position, self.end_position)
-
-        if maximizing_player:
-            max_value = float('-inf')
-            for neighbor in self.get_neighbor(node.position):
-                max_value = max(max_value, self.alpha_beta_search(Node(neighbor, 0, 0), depth - 1, alpha, beta, False))
-                alpha = max(alpha, max_value)
-                if beta <= alpha:
-                    break  # Pruning
-            return max_value
-        else:
-            min_value = float('inf')
-            for neighbor in self.get_neighbor(node.position):
-                min_value = min(min_value, self.alpha_beta_search(Node(neighbor, 0, 0), depth - 1, alpha, beta, True))
-                beta = min(beta, min_value)
-                if beta <= alpha:
-                    break  # Pruning
-            return min_value
-        
-    def find_path_alpha_beta(self):
-        start = self.start_position
-        empty_set = []
-        came_from = {}
-        depth = 3
-        alpha = float('-inf')
-        beta = float('inf')
-        maximizing_player = True
-
-        player = Player(start[0], start[1])  # Create a Player object for the start position
-
-        while empty_set:
-            current = heapq.heappop(empty_set)
-
-            if self.at_end(player):  # Check with the Player object
-                return self.reconstruct_path(start, self.end_position, current, came_from)
-
-            for neighbor in self.get_neighbor(current.position):
-                neighbor_node = Node(neighbor, 0, self.alpha_beta_search(Node(neighbor, 0, 0), depth, alpha, beta, False))
-                came_from[neighbor_node] = current
-                heapq.heappush(empty_set, neighbor_node)
-
-        return None
 
     #Check if the neighbors is an obstacle 
     def get_neighbor(self, position):
@@ -206,7 +148,7 @@ class Maze:
                 return self.find_path_alpha_beta()
             else:
                 print("Invalid input, please Type 1 for A* Search, or 2 for Alpha-Beta Pruning in the Maze :")
-
+                
     #Visualisation in the maze
     #def visualise(self, player):
      #   for i in range(self.rows):
@@ -228,11 +170,11 @@ class Maze:
         
 #Example of an open path and walls in a maze
 maze_data = [
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0]
+    [0, 1, 1, 0, 1],
+    [0, 0, 1, 1, 0],
+    [1, 0, 0, 1, 1],
+    [1, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0]
 ]
 
 #Creating a maze
@@ -241,7 +183,7 @@ maze = Maze(maze_data)
 #Creating player position
 player = Player(0, 0)
 
-path = maze.choose_algorithm()
+path = maze.find_path_a_star()
 
 if path:
     print("Path found : " , path)
