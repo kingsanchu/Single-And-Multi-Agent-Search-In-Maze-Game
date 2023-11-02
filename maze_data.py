@@ -1,5 +1,3 @@
-from main import Maze
-
 small_maze_data = [
     [0, 0, 0, 0, 0],
     [0, 1, 1, 0, 0],
@@ -29,8 +27,3 @@ large_maze_data = [
     [0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
-
-# Creating mazes
-small_maze = Maze(small_maze_data)
-medium_maze = Maze(medium_maze_data)
-large_maze = Maze(large_maze_data)

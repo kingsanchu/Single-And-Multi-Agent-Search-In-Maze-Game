@@ -1,6 +1,7 @@
 # @author Steven CHU
 
 import heapq
+from maze_data import small_maze_data, medium_maze_data, large_maze_data
 
 class Node:
     def __init__(self, position, g_cost, h_cost):
@@ -139,6 +140,7 @@ class Maze:
     #When player is at the ending path
     def at_end(self, player):
         return(player.x, player.y) == self.end_position
+
                 
     #Visualisation in the maze
     #def visualise(self, player):
@@ -158,25 +160,18 @@ class Maze:
             #else:
              #   print('#', end = ' ')
         #print()
-        
-#Example of an open path and walls in a maze
-maze_data = [
-    [0, 1, 1, 0, 1],
-    [0, 0, 1, 1, 0],
-    [1, 0, 0, 1, 1],
-    [1, 1, 0, 0, 0],
-    [0, 0, 0, 1, 0]
-]
 
+if __name__ == "__main__":
+    
 #Creating a maze
-maze = Maze(maze_data)
+    maze = Maze(medium_maze_data)
 
 #Creating player position
-player = Player(0, 0)
+    player = Player(0, 0)
 
-path = maze.find_path_a_star()
+    path = maze.find_path_a_star()
 
-if path:
-    print("Path found : " , path)
-else:
-    print("No Path Found")
+    if path:
+        print("Path found : " , path)
+    else:
+        print("No Path Found")
