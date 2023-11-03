@@ -1,17 +1,7 @@
 # @author Steven CHU
 
-import heapq
 from maze_data import small_maze_data, medium_maze_data, large_maze_data
-
-class Node:
-    def __init__(self, position, g_cost, h_cost):
-        self.position = position
-        self.g_cost = g_cost
-        self.h_cost = h_cost
-        self.f_cost = g_cost + h_cost
-        
-    def __lt__(self, other):
-        return self.f_cost < other.f_cost
+from algorithms import Algorithms
 
 class Player:
     # Record if the player or cell visited the coordinates or not.
@@ -28,93 +18,6 @@ class Maze:
         self.cols = len(maze_data[0])
         self.start_position = (0,0)
         self.end_position = (self.rows -1, self.cols -1)
-
-    def heuristic(self, position, end):
-        x1, y1 = position
-        x2, y2 = end
-        return abs(x1 - x2) + abs(y1 - y2)
-    
-    def reconstruct_path(self, start, end, current, came_from): 
-        path = []
-        while current.position != start:
-            path.append(current.position)
-            current = came_from[current]
-        path.append(start)
-        path.reverse()
-        return path
-
-# A* Search Algorithm
-
-    def find_path_a_star(self):
-        start = self.start_position
-        end = self.end_position
-        empty_set = []
-        visited = set()
-        starting_node = Node(start, 0, self.heuristic(start, end))
-        heapq.heappush(empty_set, starting_node)
-        came_from={}
-
-        while empty_set:
-            current = heapq.heappop(empty_set)
-
-            if current.position == end:
-                return self.reconstruct_path(start, end, current, came_from)
-            
-            visited.add(current.position)
-
-            for neighbor in self.get_neighbor(current.position):
-                if neighbor in visited:
-                    continue
-
-                g_cost = current.g_cost+1
-                h_cost = self.heuristic(neighbor, end)
-                neighbor_node = Node(neighbor, g_cost, h_cost)
-                came_from[neighbor_node] = current
-
-                if neighbor_node not in empty_set:
-                    heapq.heappush(empty_set, neighbor_node)
-                    
-        return None
-
-    def a_star_search(self, start, end):
-        empty_set = [] 
-        visited = set()
-        starting_node = Node(start, 0, self.heuristic(start, end))
-        heapq.heappush(empty_set,  starting_node)
-
-        while empty_set:
-            current = heapq.heappop(empty_set)
-
-            if current.position == end :
-                return self.reconstruct_path(start, end, current)
-            
-        visited.add(current.position)
-
-        for neighbor in self.get_neighbor(current.position):
-            if neighbor in visited:
-                continue
-
-            g_cost = current.g_cost + 1
-            h_cost = self.heuristic(neighbor, end)
-            neighbor_node = Node(neighbor, g_cost, h_cost)
-
-            if neighbor_node not in empty_set:
-                heapq.heappush(empty_set, neighbor_node)
-
-    #Check if the neighbors is an obstacle 
-    def get_neighbor(self, position):
-        x, y = position
-        neighbors = []
-        if x > 0 and self.maze_data[x-1][y] == 0:
-            neighbors.append((x-1, y))
-        if x < self.rows - 1 and self.maze_data[x+1][y] == 0:
-            neighbors.append((x+1, y))
-        if y > 0 and self.maze_data[x][y-1] == 0:
-            neighbors.append((x, y-1))
-        if y < self.rows - 1 and self.maze_data[x][y+1] == 0:
-            neighbors.append((x, y+1))
-        
-        return neighbors
          
     #Check if the player can move on to the next coordinate
     def check_move(self, player, direction):
@@ -164,12 +67,14 @@ class Maze:
 if __name__ == "__main__":
     
 #Creating a maze
-    maze = Maze(medium_maze_data)
+    maze = Maze(large_maze_data)
 
 #Creating player position
     player = Player(0, 0)
 
-    path = maze.find_path_a_star()
+    alg = Algorithms(large_maze_data, maze.start_position, maze.end_position)
+
+    path = alg.find_path_a_star()
 
     if path:
         print("Path found : " , path)
