@@ -44,26 +44,6 @@ class Maze:
     def at_end(self, player):
         return(player.x, player.y) == self.end_position
 
-                
-    #Visualisation in the maze
-    #def visualise(self, player):
-     #   for i in range(self.rows):
-      #      for j in range(self.cols):
-       #         if (i,j) == self.start_position:
-        #            print('S', end = ' ')
-         #       elif (i, j) == self.end_position:
-          #          print('E', end=' ')
-           #     elif self.maze_data[i][j] == 0:
-            #        if player.x == i and player.y == j:
-             #           print('P', end = ' ')
-              #      else:
-               #         print('.', end = ' ')
-                #else: 
-                 #   print('.', end = ' ')
-            #else:
-             #   print('#', end = ' ')
-        #print()
-
 if __name__ == "__main__":
     
 #Creating a maze
