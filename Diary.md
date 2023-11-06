@@ -43,3 +43,7 @@ Successfully run the maze in A* Search
 # 2/11
 
 Adding different maze size
+
+# 6/11
+
+Adding BFS and DFS search on the maze
