@@ -1,5 +1,6 @@
 from maze_data import small_maze_data, medium_maze_data, large_maze_data
-from algorithms import Algorithms
+from a_star_search import Algorithms
+from dfs_bfs import bfs, dfs
 from main import Maze, Player
 
 if __name__ == "__main__":
@@ -32,9 +33,9 @@ if __name__ == "__main__":
     if algorithm_choice == "a_star":
         path = alg.find_path_a_star()
     elif algorithm_choice == "bfs":
-        path = alg.find_path_bfs()
+        path = alg.bfs()
     else:
-        path = alg.find_path_dfs()
+        path = alg.dfs()
 
     if path:
         print("Path found:", path)

@@ -1,6 +1,6 @@
 import unittest
 from maze_data import small_maze_data, medium_maze_data, large_maze_data
-from algorithms import Algorithms
+from a_star_search import Algorithms
 
 class TestAStarSearch(unittest.TestCase):
 

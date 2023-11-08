@@ -47,3 +47,7 @@ Adding different maze size
 # 6/11
 
 Adding BFS and DFS search on the maze
+
+# 8/11 
+
+Refresh all search methods and implementing GUI
