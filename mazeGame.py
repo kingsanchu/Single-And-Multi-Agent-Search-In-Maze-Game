@@ -88,11 +88,11 @@ class agent:
                     except:
                         pass
                     if self.filled:
-                        lll = self._parentMaze._canvas.coords(self._head)
-                        oldcell = (round(((lll[1]-26)/self._parentMaze._cell_width)+1), round(
-                            ((lll[0]-26)/self._parentMaze._cell_width)+1))
+                        cell_coordinates = self._parentMaze._canvas.coords(self._head)
+                        old_cell = (round(((cell_coordinates[1]-26)/self._parentMaze._cell_width)+1), round(
+                            ((cell_coordinates[0]-26)/self._parentMaze._cell_width)+1))
                         self._parentMaze._redrawCell(
-                            *oldcell, self._parentMaze.theme)
+                            *old_cell, self._parentMaze.theme)
                 else:
                     self._parentMaze._canvas.itemconfig(
                         self._head, fill=self.color.value[1])  # ,outline='gray70')
@@ -117,16 +117,16 @@ class agent:
                         self._parentMaze._canvas.tag_lower(self._head, 'ov')
                     except:
                         pass
-                    o = self._orient % 4
-                    if o == 1:
-                        self._RCW()
+                    orientation = self._orient % 4
+                    if orientation == 1:
+                        self.rotate_clockwise()
                         self._orient -= 1
-                    elif o == 3:
-                        self._RCCW()
+                    elif orientation == 3:
+                        self.rotate_counter_clockwise()
                         self._orient += 1
-                    elif o == 2:
-                        self._RCCW()
-                        self._RCCW()
+                    elif orientation == 2:
+                        self.rotate_counter_clockwise()
+                        self.rotate_counter_clockwise()
                         self._orient += 2
             else:
                 self._head = self._parentMaze._canvas.create_rectangle(
@@ -157,42 +157,42 @@ class agent:
         self.y = newpos[1]
         self._position = newpos
 
-    def _RCCW(self):
+    def rotate_counter_clockwise(self):
         '''
         To Rotate the agent in Counter Clock Wise direction
         '''
         def pointNew(p, newOrigin):
             return (p[0]-newOrigin[0], p[1]-newOrigin[1])
-        w = self._parentMaze._cell_width
-        x = self.x*w-w+self._parentMaze._LabWidth
-        y = self.y*w-w+self._parentMaze._LabWidth
-        cent = (y+w/2, x+w/2)
-        p1 = pointNew((self._coord[0], self._coord[1]), cent)
-        p2 = pointNew((self._coord[2], self._coord[3]), cent)
-        p1CW = (p1[1], -p1[0])
-        p2CW = (p2[1], -p2[0])
-        p1 = p1CW[0]+cent[0], p1CW[1]+cent[1]
-        p2 = p2CW[0]+cent[0], p2CW[1]+cent[1]
+        cell_width = self._parentMaze._cell_width
+        x = self.x*cell_width-cell_width+self._parentMaze._LabWidth
+        y = self.y*cell_width-cell_width+self._parentMaze._LabWidth
+        center = (y+cell_width/2, x+cell_width/2)
+        p1 = pointNew((self._coord[0], self._coord[1]), center)
+        p2 = pointNew((self._coord[2], self._coord[3]), center)
+        p1_cw = (p1[1], -p1[0])
+        p2_cw = (p2[1], -p2[0])
+        p1 = p1_cw[0]+center[0], p1_cw[1]+center[1]
+        p2 = p2_cw[0]+center[0], p2_cw[1]+center[1]
         self._coord = (*p1, *p2)
         self._parentMaze._canvas.coords(self._head, *self._coord)
         self._orient = (self._orient-1) % 4
 
-    def _RCW(self):
+    def rotate_clockwise(self):
         '''
         To Rotate the agent in Clock Wise direction
         '''
         def pointNew(p, newOrigin):
             return (p[0]-newOrigin[0], p[1]-newOrigin[1])
-        w = self._parentMaze._cell_width
-        x = self.x*w-w+self._parentMaze._LabWidth
-        y = self.y*w-w+self._parentMaze._LabWidth
-        cent = (y+w/2, x+w/2)
-        p1 = pointNew((self._coord[0], self._coord[1]), cent)
-        p2 = pointNew((self._coord[2], self._coord[3]), cent)
-        p1CW = (-p1[1], p1[0])
-        p2CW = (-p2[1], p2[0])
-        p1 = p1CW[0]+cent[0], p1CW[1]+cent[1]
-        p2 = p2CW[0]+cent[0], p2CW[1]+cent[1]
+        cell_width = self._parentMaze._cell_width
+        x = self.x*cell_width-cell_width+self._parentMaze._LabWidth
+        y = self.y*cell_width-cell_width+self._parentMaze._LabWidth
+        center = (y+cell_width/2, x+cell_width/2)
+        p1 = pointNew((self._coord[0], self._coord[1]), center)
+        p2 = pointNew((self._coord[2], self._coord[3]), center)
+        p1_cw = (-p1[1], p1[0])
+        p2_cw = (-p2[1], p2[0])
+        p1 = p1_cw[0]+center[0], p1_cw[1]+center[1]
+        p2 = p2_cw[0]+center[0], p2_cw[1]+center[1]
         self._coord = (*p1, *p2)
         self._parentMaze._canvas.coords(self._head, *self._coord)
         self._orient = (self._orient+1) % 4
@@ -649,197 +649,190 @@ class maze:
 
     _tracePathList = []
 
-    def _tracePathSingle(self, a, p, kill, showMarked, delay):
+    def trace_path_single(self, agent, path, kill, show_marked, delay):
 
-        def killAgent(a):
+    def kill_agent(agent):
+        for i in range(len(agent._body)):
+            self._canvas.delete(agent._body[i])
+        self._canvas.delete(agent._head)
 
-            for i in range(len(a._body)):
-                self._canvas.delete(a._body[i])
-            self._canvas.delete(a._head)
-        w = self._cell_width
-        if ((a.x, a.y) in self.markCells and showMarked):
-            w = self._cell_width
-            x = a.x*w-w+self._LabWidth
-            y = a.y*w-w+self._LabWidth
-            self._canvas.create_oval(y + w/2.5+w/20, x + w/2.5+w/20, y + w/2.5 +
-                                     w/4-w/20, x + w/2.5 + w/4-w/20, fill='red', outline='red', tag='ov')
-            self._canvas.tag_raise('ov')
+    cell_width = self._cell_width
 
-        if (a.x, a.y) == (a.goal):
-            del maze._tracePathList[0][0][a]
+    if ((agent.x, agent.y) in self.mark_cells and show_marked):
+        x = agent.x * cell_width - cell_width + self._LabWidth
+        y = agent.y * cell_width - cell_width + self._LabWidth
+        self._canvas.create_oval(y + cell_width/2.5 + cell_width/20, x + cell_width/2.5 + cell_width/20,
+                                  y + cell_width/2.5 + cell_width/4 - cell_width/20, x + cell_width/2.5 + cell_width/4 - cell_width/20,
+                                  fill='red', outline='red', tag='ov')
+        self._canvas.tag_raise('ov')
+
+    if (agent.x, agent.y) == agent.goal:
+        del maze._tracePathList[0][0][agent]
+        if maze._tracePathList[0][0] == {}:
+            del maze._tracePathList[0]
+            if len(maze._tracePathList) > 0:
+                self.trace_path(maze._tracePathList[0][0], kill=maze._tracePathList[0][1], delay=maze._tracePathList[0][2])
+        if kill:
+            self._win.after(300, kill_agent, agent)
+        return
+
+    if type(path) == dict:
+        if len(path) == 0:
+            del maze._tracePathList[0][0][agent]
+            return
+        if agent.shape == 'arrow':
+            old = (agent.x, agent.y)
+            new = path[(agent.x, agent.y)]
+            orientation = agent._orient
+
+            if old != new:
+                if old[0] == new[0]:
+                    if old[1] > new[1]:
+                        movement = 3  # 'W'
+                    else:
+                        movement = 1  # 'E'
+                else:
+                    if old[0] > new[0]:
+                        movement = 0  # 'N'
+                    else:
+                        movement = 2  # 'S'
+                if movement - orientation == 2:
+                    agent.rotate_clockwise()
+                if movement - orientation == -2:
+                    agent.rotate_clockwise()
+                if movement - orientation == 1:
+                    agent.rotate_clockwise()
+                if movement - orientation == -1:
+                    agent.rotate_clockwise()
+                if movement - orientation == 3:
+                    agent.rotate_clockwise()
+                if movement - orientation == -3:
+                    agent.rotate_clockwise()
+                if movement == orientation:
+                    agent.x, agent.y = path[(agent.x, agent.y)]
+            else:
+                del path[(agent.x, agent.y)]
+        else:
+            agent.x, agent.y = path[(agent.x, agent.y)]
+
+    if type(path) == str:
+        if len(path) == 0:
+            del maze._tracePathList[0][0][agent]
             if maze._tracePathList[0][0] == {}:
                 del maze._tracePathList[0]
                 if len(maze._tracePathList) > 0:
-                    self.tracePath(
-                        maze._tracePathList[0][0], kill=maze._tracePathList[0][1], delay=maze._tracePathList[0][2])
+                    self.trace_path(maze._tracePathList[0][0], kill=maze._tracePathList[0][1], delay=maze._tracePathList[0][2])
             if kill:
-                self._win.after(300, killAgent, a)
+                self._win.after(300, kill_agent, agent)
             return
-        # If path is provided as Dictionary
-        if (type(p) == dict):
-            if (len(p) == 0):
-                del maze._tracePathList[0][0][a]
-                return
-            if a.shape == 'arrow':
-                old = (a.x, a.y)
-                new = p[(a.x, a.y)]
-                o = a._orient
+        if agent.shape == 'arrow':
+            old = (agent.x, agent.y)
+            new = path[0]
+            orientation = agent._orient
+            if new == 'N':
+                movement = 0
+            elif new == 'E':
+                movement = 1
+            elif new == 'S':
+                movement = 2
+            elif new == 'W':
+                movement = 3
 
-                if old != new:
-                    if old[0] == new[0]:
-                        if old[1] > new[1]:
-                            mov = 3  # 'W' #3
-                        else:
-                            mov = 1  # 'E' #1
+            if movement - orientation == 2:
+                agent.rotate_clockwise()
+            if movement - orientation == -2:
+                agent.rotate_clockwise()
+            if movement - orientation == 1:
+                agent.rotate_clockwise()
+            if movement - orientation == -1:
+                agent.rotate_counter_clockwise()
+            if movement - orientation == 3:
+                agent.rotate_counter_clockwise()
+            if movement - orientation == -3:
+                agent.rotate_clockwise()
+
+        if agent.shape == 'square' or movement == orientation:
+            move = path[0]
+            if move == 'E':
+                if agent.y + 1 <= self.cols:
+                    agent.y += 1
+            elif move == 'W':
+                if agent.y - 1 > 0:
+                    agent.y -= 1
+            elif move == 'N':
+                if agent.x - 1 > 0:
+                    agent.x -= 1
+                    agent.y = agent.y
+            elif move == 'S':
+                if agent.x + 1 <= self.rows:
+                    agent.x += 1
+                    agent.y = agent.y
+            elif move == 'C':
+                agent.rotate_clockwise()
+            elif move == 'A':
+                agent.rotate_counter_clockwise()
+            path = path[1:]
+
+    if type(path) == list:
+        if len(path) == 0:
+            del maze._tracePathList[0][0][agent]
+            if maze._tracePathList[0][0] == {}:
+                del maze._tracePathList[0]
+                if len(maze._tracePathList) > 0:
+                    self.trace_path(maze._tracePathList[0][0], kill=maze._tracePathList[0][1], delay=maze._tracePathList[0][2])
+            if kill:
+                self._win.after(300, kill_agent, agent)
+            return
+        if agent.shape == 'arrow':
+            old = (agent.x, agent.y)
+            new = path[0]
+            orientation = agent._orient
+
+            if old != new:
+                if old[0] == new[0]:
+                    if old[1] > new[1]:
+                        movement = 3  # 'W'
                     else:
-                        if old[0] > new[0]:
-                            mov = 0  # 'N' #0
-
-                        else:
-                            mov = 2  # 'S' #2
-                    if mov-o == 2:
-                        a._RCW()
-
-                    if mov-o == -2:
-                        a._RCW()
-                    if mov-o == 1:
-                        a._RCW()
-                    if mov-o == -1:
-                        a._RCCW()
-                    if mov-o == 3:
-                        a._RCCW()
-                    if mov-o == -3:
-                        a._RCW()
-                    if mov == o:
-                        a.x, a.y = p[(a.x, a.y)]
+                        movement = 1  # 'E'
                 else:
-                    del p[(a.x, a.y)]
-            else:
-                a.x, a.y = p[(a.x, a.y)]
-        # If path is provided as String
-        if (type(p) == str):
-            if (len(p) == 0):
-                del maze._tracePathList[0][0][a]
-                if maze._tracePathList[0][0] == {}:
-                    del maze._tracePathList[0]
-                    if len(maze._tracePathList) > 0:
-                        self.tracePath(
-                            maze._tracePathList[0][0], kill=maze._tracePathList[0][1], delay=maze._tracePathList[0][2])
-                if kill:
-
-                    self._win.after(300, killAgent, a)
-                return
-            if a.shape == 'arrow':
-                old = (a.x, a.y)
-                new = p[0]
-                o = a._orient
-                if new == 'N':
-                    mov = 0
-                elif new == 'E':
-                    mov = 1
-                elif new == 'S':
-                    mov = 2
-                elif new == 'W':
-                    mov = 3
-
-                if mov-o == 2:
-                    a._RCW()
-
-                if mov-o == -2:
-                    a._RCW()
-                if mov-o == 1:
-                    a._RCW()
-                if mov-o == -1:
-                    a._RCCW()
-                if mov-o == 3:
-                    a._RCCW()
-                if mov-o == -3:
-                    a._RCW()
-            if a.shape == 'square' or mov == o:
-                move = p[0]
-                if move == 'E':
-                    if a.y+1 <= self.cols:
-                        a.y += 1
-                elif move == 'W':
-                    if a.y-1 > 0:
-                        a.y -= 1
-                elif move == 'N':
-                    if a.x-1 > 0:
-                        a.x -= 1
-                        a.y = a.y
-                elif move == 'S':
-                    if a.x+1 <= self.rows:
-                        a.x += 1
-                        a.y = a.y
-                elif move == 'C':
-                    a._RCW()
-                elif move == 'A':
-                    a._RCCW()
-                p = p[1:]
-        # If path is provided as List
-        if (type(p) == list):
-            if (len(p) == 0):
-                del maze._tracePathList[0][0][a]
-                if maze._tracePathList[0][0] == {}:
-                    del maze._tracePathList[0]
-                    if len(maze._tracePathList) > 0:
-                        self.tracePath(
-                            maze._tracePathList[0][0], kill=maze._tracePathList[0][1], delay=maze._tracePathList[0][2])
-                if kill:
-                    self._win.after(300, killAgent, a)
-                return
-            if a.shape == 'arrow':
-                old = (a.x, a.y)
-                new = p[0]
-                o = a._orient
-
-                if old != new:
-                    if old[0] == new[0]:
-                        if old[1] > new[1]:
-                            mov = 3  # 'W' #3
-                        else:
-                            mov = 1  # 'E' #1
+                    if old[0] > new[0]:
+                        movement = 0  # 'N'
                     else:
-                        if old[0] > new[0]:
-                            mov = 0  # 'N' #0
-
-                        else:
-                            mov = 2  # 'S' #2
-                    if mov-o == 2:
-                        a._RCW()
-
-                    elif mov-o == -2:
-                        a._RCW()
-                    elif mov-o == 1:
-                        a._RCW()
-                    elif mov-o == -1:
-                        a._RCCW()
-                    elif mov-o == 3:
-                        a._RCCW()
-                    elif mov-o == -3:
-                        a._RCW()
-                    elif mov == o:
-                        a.x, a.y = p[0]
-                        del p[0]
-                else:
-                    del p[0]
+                        movement = 2  # 'S'
+                if movement - orientation == 2:
+                    agent.rotate_clockwise()
+                elif movement - orientation == -2:
+                    agent.rotate_clockwise()
+                elif movement - orientation == 1:
+                    agent.rotate_clockwise()
+                elif movement - orientation == -1:
+                    agent.rotate_counter_clockwise()
+                elif movement - orientation == 3:
+                    agent.rotate_counter_clockwise()
+                elif movement - orientation == -3:
+                    agent.rotate_clockwise()
+                elif movement == orientation:
+                    agent.x, agent.y = path[0]
+                    del path[0]
             else:
-                a.x, a.y = p[0]
-                del p[0]
+                del path[0]
+        else:
+            agent.x, agent.y = path[0]
+            del path[0]
 
-        self._win.after(delay, self._tracePathSingle,
-                        a, p, kill, showMarked, delay)
+    self._win.after(delay, self._tracePathSingle, agent, path, kill,show_marked, delay)
 
-    def tracePath(self, d, kill=False, delay=300, showMarked=False):
-        '''
-        A method to trace path by agent
-        You can provide more than one agent/path details
-        '''
-        self._tracePathList.append((d, kill, delay))
-        if maze._tracePathList[0][0] == d:
-            for a, p in d.items():
-                if a.goal != (a.x, a.y) and len(p) != 0:
-                    self._tracePathSingle(a, p, kill, showMarked, delay)
+
+
+    def tracePath(self, agents_path, kill=False, delay=300, showMarked=False):
+    
+    #A method to trace paths by agents
+   
+        self._tracePathList.append((agents_path, kill, delay))
+        if self._tracePathList[0][0] == agents_path:
+            for agent, path in agents_path.items():
+                if agent.goal != (agent.x, agent.y) and len(path) != 0:
+                    self._tracePathSingle(agent, path, kill, showMarked, delay)
 
     def run(self):
         '''

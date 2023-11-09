@@ -1,62 +1,60 @@
 from mazeGame import maze, agent, textLabel
 from queue import PriorityQueue
 
-
 def heuristic(cell1, cell2):
     x1, y1 = cell1
     x2, y2 = cell2
+    return abs(x1 - x2) + abs(y1 - y2)
 
-    return abs(x1-x2) + abs(y1-y2)
-
-
-def aStar(self):
+def aStarPathFinding(self):
     start = (self.rows, self.cols)
-    g_score = {cell: float('inf') for cell in self.grid}
-    g_score[start] = 0
-    f_score = {cell: float('inf') for cell in self.grid}
-    f_score[start] = heuristic(start, (1, 1))
+    g_scores = {cell: float('inf') for cell in self.grid}
+    g_scores[start] = 0
+    f_scores = {cell: float('inf') for cell in self.grid}
+    f_scores[start] = heuristic(start, (1, 1))
 
-    open = PriorityQueue()
-    open.put((heuristic(start, (1, 1)), heuristic(start, (1, 1)), start))
-    aPath = {}
-    while not open.empty():
-        currCell = open.get()[2]
-        if currCell == (1, 1):
+    open_cells = PriorityQueue()
+    open_cells.put((heuristic(start, (1, 1)), heuristic(start, (1, 1)), start))
+    a_path = {}
+
+    while not open_cells.empty():
+        current_cell = open_cells.get()[2]
+        if current_cell == (1, 1):
             break
-        for d in 'ESNW':
-            if self.maze_map[currCell][d] == True:
-                if d == 'E':
-                    childCell = (currCell[0], currCell[1]+1)
-                if d == 'W':
-                    childCell = (currCell[0], currCell[1]-1)
-                if d == 'N':
-                    childCell = (currCell[0]-1, currCell[1])
-                if d == 'S':
-                    childCell = (currCell[0]+1, currCell[1])
+        for direction in 'ESNW':
+            if self.maze_map[current_cell][direction] == True:
+                if direction == 'E':
+                    child_cell = (current_cell[0], current_cell[1] + 1)
+                if direction == 'W':
+                    child_cell = (current_cell[0], current_cell[1] - 1)
+                if direction == 'N':
+                    child_cell = (current_cell[0] - 1, current_cell[1])
+                if direction == 'S':
+                    child_cell = (current_cell[0] + 1, current_cell[1])
 
-                temp_g_score = g_score[currCell]+1
-                temp_f_score = temp_g_score+heuristic(childCell, (1, 1))
+                temp_g_score = g_scores[current_cell] + 1
+                temp_f_score = temp_g_score + heuristic(child_cell, (1, 1))
 
-                if temp_f_score < f_score[childCell]:
-                    g_score[childCell] = temp_g_score
-                    f_score[childCell] = temp_f_score
-                    open.put((temp_f_score, heuristic(childCell, (1, 1)), childCell))
-                    aPath[childCell] = currCell
-    fwdPath = {}
+                if temp_f_score < f_scores[child_cell]:
+                    g_scores[child_cell] = temp_g_score
+                    f_scores[child_cell] = temp_f_score
+                    open_cells.put((temp_f_score, heuristic(child_cell, (1, 1)), child_cell))
+                    a_path[child_cell] = current_cell
+
+    forward_path = {}
     cell = (1, 1)
     while cell != start:
-        fwdPath[aPath[cell]] = cell
-        cell = aPath[cell]
-    return fwdPath
-
+        forward_path[a_path[cell]] = cell
+        cell = a_path[cell]
+    return forward_path
 
 if __name__ == '__main__':
-    m = maze(10, 10)
-    m.CreateMaze()
-    path = aStar(m)
+    maze_instance = maze(10, 10)
+    maze_instance.CreateMaze()
+    path = aStarPathFinding(maze_instance)
 
-    a = agent(m, footprints=True)
-    m.tracePath({a: path})
-    l = textLabel(m, 'A Star Path Length', len(path)+1)
+    agent_a = agent(maze_instance, footprints=True)
+    maze_instance.tracePath({agent_a: path})
+    label = textLabel(maze_instance, 'A Star Path Length', len(path) + 1)
 
-    m.run()
+    maze_instance.run()
