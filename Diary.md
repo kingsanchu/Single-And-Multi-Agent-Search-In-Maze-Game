@@ -51,3 +51,7 @@ Adding BFS and DFS search on the maze
 # 8/11 
 
 Refresh all search methods and implementing GUI
+
+# 12/11
+
+Researching on Dijkstra's Algorithm
