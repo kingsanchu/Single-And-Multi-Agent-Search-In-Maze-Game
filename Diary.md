@@ -55,3 +55,7 @@ Refresh all search methods and implementing GUI
 # 12/11
 
 Researching on Dijkstra's Algorithm
+
+# 14/11
+
+Planted Dijkstra's Algorithm onto the maze
