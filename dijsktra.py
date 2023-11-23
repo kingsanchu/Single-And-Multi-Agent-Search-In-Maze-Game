@@ -1,4 +1,6 @@
-from mazeGame import maze, agent, textLabel
+from maze import maze
+from agent import agent
+from textLabel import textLabel
 from queue import PriorityQueue
 
 def heuristic(cell1, cell2):

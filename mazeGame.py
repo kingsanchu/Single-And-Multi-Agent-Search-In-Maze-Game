@@ -261,6 +261,8 @@ class maze:
         self._canvas = None
         self._agents = []
         self.markCells = []
+        self._LabWidth = 10
+
 
     @property
     def grid(self):

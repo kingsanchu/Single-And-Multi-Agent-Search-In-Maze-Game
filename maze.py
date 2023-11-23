@@ -3,12 +3,15 @@ import datetime
 import csv
 import os
 from tkinter import *
-from enum import Enum
+from COLOR import COLOR
+from agent import agent
+from textLabel import textLabel
 from collections import deque
-from mazeGame import COLOR, textLabel
-from agent import Agent
 
-class Maze:
+
+
+
+class maze:
 
     def __init__(self, rows=10, cols=10):
 
@@ -22,6 +25,8 @@ class Maze:
         self._canvas = None
         self._agents = []
         self.markCells = []
+        self._LabWidth = 10
+
 
     @property
     def grid(self):
@@ -588,3 +593,19 @@ class Maze:
 
         self._win.after(delay, self.trace_path_single, agent,
                     path, kill, show_marked, delay)
+
+    def tracePath(self, agents_path, kill=False, delay=300, showMarked=False):
+
+        # A method to trace paths by agents
+
+        self._tracePathList.append((agents_path, kill, delay))
+        if self._tracePathList[0][0] == agents_path:
+            for agent, path in agents_path.items():
+                if agent.goal != (agent.x, agent.y) and len(path) != 0:
+                    self.trace_path_single(agent, path, kill, showMarked, delay)
+
+    def run(self):
+        '''
+        Finally to run the Tkinter Main Loop
+        '''
+        self._win.mainloop()

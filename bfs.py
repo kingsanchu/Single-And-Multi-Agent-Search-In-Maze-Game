@@ -1,4 +1,7 @@
-from mazeGame import maze, agent, textLabel, COLOR
+from maze import maze
+from agent import agent
+from textLabel import textLabel
+from COLOR import COLOR
 from collections import deque
 
 def breadthFirstSearch(maze, start=None):

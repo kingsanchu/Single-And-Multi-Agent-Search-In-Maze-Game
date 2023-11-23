@@ -1,4 +1,7 @@
-from mazeGame import maze, agent, COLOR, textLabel
+from maze import maze
+from agent import agent
+from textLabel import textLabel
+from COLOR import COLOR
 
 def depthFirstSearch(self, start=None):
     if start is None:

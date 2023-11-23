@@ -1,12 +1,8 @@
-import random
-import datetime
-import csv
-import os
-from tkinter import *
-from mazeGame import COLOR, textLabel
-from enum import Enum
-from collections import deque
-class Agent:
+from COLOR import COLOR
+
+
+
+class agent:
 
     def __init__(self, parentMaze, x=None, y=None, shape='square', goal=None, filled=False, footprints=False, color: COLOR = COLOR.blue):
 
