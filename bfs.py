@@ -5,6 +5,16 @@ from COLOR import COLOR
 from collections import deque
 
 def breadthFirstSearch(maze, start=None):
+    """
+    Finds the shortest path in a maze using Breadth-First Search (BFS) algorithm.
+
+    Args:
+    - maze: The maze instance.
+    - start: The starting point for the BFS search. Defaults to the maze's dimensions if not provided.
+
+    Returns:
+    - A tuple containing three dictionaries representing the search path, BFS path, and forward path.
+    """
     if start is None:
         start = (maze.rows, maze.cols)
     frontier = deque()

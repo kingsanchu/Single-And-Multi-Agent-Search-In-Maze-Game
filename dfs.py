@@ -4,6 +4,16 @@ from textLabel import textLabel
 from COLOR import COLOR
 
 def depthFirstSearch(self, start=None):
+    """
+    Executes a Depth-First Search (DFS) algorithm to find a path in a maze.
+
+    Args:
+    - self: The maze instance.
+    - start: The starting point for DFS search. Defaults to the maze's dimensions if not provided.
+
+    Returns:
+    - A tuple containing three dictionaries representing the DFS search, DFS path, and forward path.
+    """
     if start is None:
         start = (self.rows, self.cols)
     explored_cells = [start]

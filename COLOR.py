@@ -1,6 +1,12 @@
 from enum import Enum
 
 class COLOR(Enum):
+    """
+    Enum class defining colors with their corresponding color codes.
+
+    Attributes:
+    - Color scheme with background and text color.
+    """
     dark = ('gray11', 'white')
     light = ('white', 'black')
     black = ('black', 'dim gray')

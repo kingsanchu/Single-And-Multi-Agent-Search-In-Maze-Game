@@ -63,3 +63,7 @@ Planted Dijkstra's Algorithm onto the maze
 # 22/11
 
 Restructing code to enhance readability
+
+# 24/11
+
+Adding DocString to function
