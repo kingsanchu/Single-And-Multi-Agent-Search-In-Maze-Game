@@ -59,3 +59,7 @@ Researching on Dijkstra's Algorithm
 # 14/11
 
 Planted Dijkstra's Algorithm onto the maze
+
+# 22/11
+
+Restructing code to enhance readability
