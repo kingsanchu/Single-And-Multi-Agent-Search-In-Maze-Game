@@ -3,21 +3,6 @@ from agent import agent
 from textLabel import textLabel
 from queue import PriorityQueue
 
-def heuristic(cell1, cell2):
-    """
-    Calculates the heuristic (Manhattan distance) between two cells.
-
-    Args:
-    - cell1: Tuple representing the coordinates of the first cell (x, y).
-    - cell2: Tuple representing the coordinates of the second cell (x, y).
-
-    Returns:
-    - The Manhattan distance between the two cells.
-    """
-    x1, y1 = cell1
-    x2, y2 = cell2
-    return abs(x1 - x2) + abs(y1 - y2)
-
 def dijkstraPathFinding(self):
     """
     Performs Dijkstra's algorithm to find the shortest path in a maze.

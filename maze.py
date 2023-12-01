@@ -9,8 +9,6 @@ from textLabel import textLabel
 from collections import deque
 
 
-
-
 class maze:
 
     def __init__(self, rows=10, cols=10):
@@ -26,7 +24,6 @@ class maze:
         self._agents = []
         self.markCells = []
         self._LabWidth = 10
-
 
     @property
     def grid(self):
@@ -439,7 +436,7 @@ class maze:
             if maze._tracePathList[0][0] == {}:
                 del maze._tracePathList[0]
                 if len(maze._tracePathList) > 0:
-                    self.trace_path(
+                    self.tracePath(
                         maze._tracePathList[0][0], kill=maze._tracePathList[0][1], delay=maze._tracePathList[0][2])
             if kill:
                 self._win.after(300, kill_agent, agent)
@@ -490,7 +487,7 @@ class maze:
                 if maze._tracePathList[0][0] == {}:
                     del maze._tracePathList[0]
                     if len(maze._tracePathList) > 0:
-                        self.trace_path(
+                        self.tracePath(
                             maze._tracePathList[0][0], kill=maze._tracePathList[0][1], delay=maze._tracePathList[0][2])
                 if kill:
                     self._win.after(300, kill_agent, agent)
@@ -549,7 +546,7 @@ class maze:
                 if maze._tracePathList[0][0] == {}:
                     del maze._tracePathList[0]
                     if len(maze._tracePathList) > 0:
-                        self.trace_path(
+                        self.tracePath(
                             maze._tracePathList[0][0], kill=maze._tracePathList[0][1], delay=maze._tracePathList[0][2])
                 if kill:
                     self._win.after(300, kill_agent, agent)
@@ -592,7 +589,7 @@ class maze:
                 del path[0]
 
         self._win.after(delay, self.trace_path_single, agent,
-                    path, kill, show_marked, delay)
+                        path, kill, show_marked, delay)
 
     def tracePath(self, agents_path, kill=False, delay=300, showMarked=False):
 
@@ -602,7 +599,8 @@ class maze:
         if self._tracePathList[0][0] == agents_path:
             for agent, path in agents_path.items():
                 if agent.goal != (agent.x, agent.y) and len(path) != 0:
-                    self.trace_path_single(agent, path, kill, showMarked, delay)
+                    self.trace_path_single(
+                        agent, path, kill, showMarked, delay)
 
     def run(self):
         '''

@@ -67,3 +67,7 @@ Restructing code to enhance readability
 # 24/11
 
 Adding DocString to function
+
+# 30/11
+
+Fixing trace path bug
