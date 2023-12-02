@@ -62,12 +62,15 @@ if __name__ == '__main__':
     # Create agents
     agent_a = agent(maze_instance, footprints=True, color=COLOR.yellow, shape='square', filled=True)
     agent_b = agent(maze_instance, footprints=True, color=COLOR.red, shape='square', filled=False)
-    agent_c = agent(maze_instance, 1, 1, footprints=True, color=COLOR.cyan, shape='square', filled=True, goal=(maze_instance.rows, maze_instance.cols))
+    agent_c = agent(maze_instance, 1, 1, footprints=True, color=COLOR.green, shape='square', filled=True, goal=(maze_instance.rows, maze_instance.cols))
     
     # Trace paths obtained from search algorithms
     maze_instance.tracePath({agent_a: searchPath}, delay=100)
     maze_instance.tracePath({agent_c: bfsPath}, delay=100)
     maze_instance.tracePath({agent_b: fwdPath}, delay=100)
     
+    path = breadthFirstSearch(maze_instance)
+    label = textLabel(maze_instance, 'BFS', len(path) + 1)
+
     # Run the maze
     maze_instance.run()

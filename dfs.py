@@ -61,16 +61,20 @@ def depthFirstSearch(self, start=None):
 
 if __name__ == '__main__':
     maze_instance = maze(10, 10)  # Change to any size
-    maze_instance.CreateMaze(2, 4)  # (2,4) is Goal Cell, Change that to any other valid cell
+    maze_instance.CreateMaze(2, 4, theme='light')  # (2,4) is Goal Cell, Change that to any other valid cell
 
     # (5,1) is Start Cell, Change that to any other valid cell
     dfs_search, dfs_path, forward_path = depthFirstSearch(maze_instance, (5, 1))
 
-    agent_a = agent(maze_instance, 5, 1, goal=(2, 4), footprints=True, shape='square', color=COLOR.green)
-    agent_b = agent(maze_instance, 2, 4, goal=(5, 1), footprints=True, filled=True)
-    agent_c = agent(maze_instance, 5, 1, footprints=True, color=COLOR.yellow)
+    agent_a = agent(maze_instance, 5, 1, goal=(2, 4), footprints=True, shape='square', color=COLOR.yellow)
+    agent_b = agent(maze_instance, 2, 4, goal=(5, 1), footprints=True, filled=True, color=COLOR.red)
+    agent_c = agent(maze_instance, 5, 1, footprints=True, color=COLOR.green)
 
     maze_instance.tracePath({agent_a: dfs_search}, showMarked=True)
     maze_instance.tracePath({agent_b: dfs_path})
     maze_instance.tracePath({agent_c: forward_path})
+
+    path = depthFirstSearch(maze_instance)
+    label = textLabel(maze_instance, 'DFS', len(path) + 1)
+
     maze_instance.run()

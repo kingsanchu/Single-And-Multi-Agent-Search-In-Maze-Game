@@ -2,7 +2,7 @@ from maze import maze
 from agent import agent
 from textLabel import textLabel
 from queue import PriorityQueue
-
+from COLOR import COLOR
 def heuristic(cell1, cell2):
     """
     Calculates the heuristic (Manhattan distance) between two cells.
@@ -68,11 +68,12 @@ def aStarPathFinding(self):
 
 if __name__ == '__main__':
     maze_instance = maze(10, 10)
-    maze_instance.CreateMaze()
+    maze_instance.CreateMaze(theme='light')
     path = aStarPathFinding(maze_instance)
 
-    agent_a = agent(maze_instance, footprints=True)
+    agent_a = agent(maze_instance, footprints=True, color=COLOR.yellow)
     maze_instance.tracePath({agent_a: path})
-    label = textLabel(maze_instance, 'A Star Path Length', len(path) + 1)
+
+    label = textLabel(maze_instance, 'A Star (Path Length)', len(path) + 1)
 
     maze_instance.run()
