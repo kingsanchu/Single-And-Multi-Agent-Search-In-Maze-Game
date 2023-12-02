@@ -71,7 +71,7 @@ if __name__ == '__main__':
     maze_instance.CreateMaze(theme='light')
     path = aStarPathFinding(maze_instance)
 
-    agent_a = agent(maze_instance, footprints=True, color=COLOR.yellow)
+    agent_a = agent(maze_instance, footprints=True, color=COLOR.red)
     maze_instance.tracePath({agent_a: path})
 
     label = textLabel(maze_instance, 'A Star (Path Length)', len(path) + 1)
