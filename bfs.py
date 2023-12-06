@@ -57,7 +57,7 @@ if __name__ == '__main__':
     maze_instance.CreateMaze(loopPercent=10, theme='light')
     
     # Perform breadth-first search to get paths
-    searchPath, bfsPath, fwdPath = breadthFirstSearch(maze_instance)
+    searchPath, bfsPath, forwardPath = breadthFirstSearch(maze_instance)
     
     # Create agents
     agent_a = agent(maze_instance, footprints=True, color=COLOR.yellow, shape='square', filled=True)
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     # Trace paths obtained from search algorithms
     maze_instance.tracePath({agent_a: searchPath}, delay=100)
     maze_instance.tracePath({agent_c: bfsPath}, delay=100)
-    maze_instance.tracePath({agent_b: fwdPath}, delay=100)
+    maze_instance.tracePath({agent_b: forwardPath}, delay=100)
     
     path = breadthFirstSearch(maze_instance)
     label = textLabel(maze_instance, 'BFS', len(path) + 1)

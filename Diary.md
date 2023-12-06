@@ -71,3 +71,7 @@ Adding DocString to function
 # 30/11
 
 Fixing trace path bug
+
+# 6/12
+
+Adding documentation on README and merging into main branch
