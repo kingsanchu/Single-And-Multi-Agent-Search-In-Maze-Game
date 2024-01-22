@@ -75,3 +75,11 @@ Fixing trace path bug
 # 6/12
 
 Adding documentation on README and merging into main branch
+
+# 20/1
+
+Brainstorming gaming interface
+
+# 22/1
+
+Creating Start Menu for the game
