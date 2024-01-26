@@ -1,46 +1,64 @@
 import tkinter as tk
 
+class MainMenu(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.pack()
+        self.create_widgets()
 
-def start_game():
-    # Destroy the main menu
-    root.destroy()
+    def create_widgets(self):
+        self.start_button = tk.Button(self, text="Start Game", command=self.show_difficulty_page)
+        self.start_button.pack(side="top")
 
-    # Create a new window for difficulty selection
-    difficulty_window = tk.Tk()
-    difficulty_window.title("Difficulty Selection")
+        self.quit_button = tk.Button(self, text="Quit", command=self.quit_game)
+        self.quit_button.pack(side="bottom")
 
-    # Label for difficulty selection
-    label = tk.Label(difficulty_window, text="Select Difficulty:")
-    label.pack(pady=10)
+    def show_difficulty_page(self):
+        self.destroy()  # Destroy the current frame (main menu)
+        DifficultyPage(self.master)  # Create a new frame for difficulty selection
 
-    # Radio buttons for difficulty options
-    difficulty_var = tk.StringVar()
-    difficulty_var.set("Easy")  # Default difficulty
+    def quit_game(self):
+        self.master.destroy()  # Close the application
 
-    difficulties = ["Easy", "Medium", "Hard"]
+class DifficultyPage(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.pack()
+        self.create_widgets()
 
-    for difficulty in difficulties:
-        tk.Radiobutton(difficulty_window, text=difficulty,
-                       variable=difficulty_var, value=difficulty).pack()
+    def create_widgets(self):
+        self.label = tk.Label(self, text="Select Difficulty:")
+        self.label.pack(pady=10)
 
-    # Button to start the game with the selected difficulty
-    start_button = tk.Button(difficulty_window, text="Start Game",
-                             command=lambda: start_game_logic(difficulty_var.get()))
-    start_button.pack(pady=10)
+        self.difficulty_var = tk.StringVar()
+        self.difficulty_var.set("Easy")  # Default difficulty
 
+        difficulties = ["Easy", "Medium", "Hard"]
 
-def start_game_logic(difficulty):
-    print(f"Game started with difficulty: {difficulty}")
-    # Add your game start logic here
+        for difficulty in difficulties:
+            tk.Radiobutton(self, text=difficulty, variable=self.difficulty_var, value=difficulty).pack()
 
+        self.start_button = tk.Button(self, text="Start Game", command=self.start_game)
+        self.start_button.pack(pady=10)
 
-# Create the main menu
+        self.quit_button = tk.Button(self, text="Quit", command=self.quit_game)
+        self.quit_button.pack(side="bottom")
+
+    def start_game(self):
+        print(f"Game started with difficulty: {self.difficulty_var.get()}")
+        # Add your game start logic here
+
+    def quit_game(self):
+        self.master.destroy()  # Close the application
+
+# Create the main application window
 root = tk.Tk()
 root.title("Game Menu")
 
-# Button to start the game
-start_button = tk.Button(root, text="Start Game", command=start_game)
-start_button.pack(pady=50)
+# Create the main menu frame
+main_menu = MainMenu(master=root)
 
 # Run the Tkinter event loop
 root.mainloop()
