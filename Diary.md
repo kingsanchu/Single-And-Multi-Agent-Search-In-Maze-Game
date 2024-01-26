@@ -83,3 +83,7 @@ Brainstorming gaming interface
 # 22/1
 
 Creating Start Menu for the game
+
+# 26/1
+
+Adding difficulty page to the start menu
