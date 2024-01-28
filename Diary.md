@@ -87,3 +87,7 @@ Creating Start Menu for the game
 # 26/1
 
 Adding difficulty page to the start menu
+
+# 28/1
+
+Researching for multi-agent search building method
