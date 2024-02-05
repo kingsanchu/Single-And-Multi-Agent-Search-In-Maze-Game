@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
 class MainMenu(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -12,12 +11,13 @@ class MainMenu(tk.Frame):
         self.root.configure(bg="#f0f0f0")
 
     def create_widgets(self):
+        # Adding padding (pady) to the buttons for better spacing
         self.start_button = tk.Button(
             self, text="Start Game", command=self.show_difficulty_page)
-        self.start_button.pack(side="top")
+        self.start_button.pack(side="top", pady=20)
 
         self.quit_button = tk.Button(self, text="Quit", command=self.quit_game)
-        self.quit_button.pack(side="bottom")
+        self.quit_button.pack(side="bottom", pady=20)
 
     def show_difficulty_page(self):
         self.destroy()  # Destroy the current frame (main menu)
