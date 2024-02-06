@@ -91,3 +91,11 @@ Adding difficulty page to the start menu
 # 28/1
 
 Researching for multi-agent search building method
+
+# 2/2
+
+Adding padding to buttons
+
+# 5/6
+ 
+Prototyping agent to move around the maze
