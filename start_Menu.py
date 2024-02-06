@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import PhotoImage
+
 
 class MainMenu(tk.Frame):
     def __init__(self, master=None):
@@ -8,7 +10,6 @@ class MainMenu(tk.Frame):
         self.create_widgets()
         self.root = root
         self.root.geometry("500x300")
-        self.root.configure(bg="#f0f0f0")
 
     def create_widgets(self):
         # Adding padding (pady) to the buttons for better spacing
