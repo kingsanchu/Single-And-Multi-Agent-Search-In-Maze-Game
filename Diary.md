@@ -96,6 +96,10 @@ Researching for multi-agent search building method
 
 Adding padding to buttons
 
-# 5/6
+# 5/2
  
 Prototyping agent to move around the maze
+
+# 7/2 
+
+Researching for expectimax algorithm
