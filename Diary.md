@@ -75,3 +75,7 @@ Fixing trace path bug
 # 6/12
 
 Adding documentation on README and merging into main branch
+
+# 12/2
+
+Update agent movement definitions and walls
