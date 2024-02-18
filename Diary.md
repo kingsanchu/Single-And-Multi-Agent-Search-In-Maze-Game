@@ -87,3 +87,7 @@ Create map base board for pacman maze
 # 16/2
 
 Creating pacman power ups
+
+# 18/2 
+
+Creating the pickups to invert the ghost function

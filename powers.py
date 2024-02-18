@@ -1,6 +1,7 @@
 from character import Character
 from agent import agent
 from wall import Wall
+from pickup import Pickup
 
 
 class Pacman(Character):
