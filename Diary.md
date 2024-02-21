@@ -91,3 +91,7 @@ Creating pacman power ups
 # 18/2 
 
 Creating the pickups to invert the ghost function
+
+# 21/2
+
+Developing the GUI window for application
