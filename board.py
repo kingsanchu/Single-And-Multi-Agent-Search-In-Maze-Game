@@ -1,5 +1,7 @@
 from agent import agent
 from wall import Wall
+from powers import Pacman
+from pickup import Pickup
 
 class Board():
     def __init__(self, width, height, images):
@@ -184,10 +186,10 @@ class Board():
             they past right by each other. '''
         if self.has_last_location(self.pacman):
             dy, dx = self.pacman.last_location
-            return type(self[dy][dx]) == Enemy
+            return type(self[dy][dx]) == agent
 
     def _validate_upcoming_enemy_in_square(self, game_object, previous_y, previous_x):
-        return type(game_object) == Pacman and type(self[previous_y][previous_x]) == Enemy and \
+        return type(game_object) == Pacman and type(self[previous_y][previous_x]) == agent and \
             not game_object.invulnerable
 
     def _validate_movement(self, y, x):
@@ -310,7 +312,7 @@ class Board():
                 if type(self[i][j]) == Pacman:
                     new_row.append(None)
 
-                elif type(self[i][j]) == Enemy:
+                elif type(self[i][j]) == agent:
 
                     if self[i][j].pickup_memory is not None:
                         new_row.append(self[i][j].pickup_memory)

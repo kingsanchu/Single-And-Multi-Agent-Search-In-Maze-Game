@@ -203,7 +203,20 @@ class Window():
             self._master.unbind('<Down>')
             self._master.unbind('<Escape>')
 
+    def check_pause(self) -> None:
+        ''' Check_pause constantly calls itself to check when the player
+            no longer wants the game to be paused. If so, then calls the
+            update() function which will continue the game. '''
+        if self._pause:
+            self._master.after(1, self.check_pause)
+        else:
+            self.update()
+
+    def _pause_game(self, event: tk.Event) -> None:
+        ''' Pauses or unpauses the game by pressing the esc key. '''
+        self._pause = not self._pause
     # Main Functions #
+
     def update(self) -> None:
         '''
         Updates the game consistently throughout the game. Also, updates the

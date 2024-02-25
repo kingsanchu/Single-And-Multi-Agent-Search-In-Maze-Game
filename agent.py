@@ -1,7 +1,7 @@
 from COLOR import COLOR
 from collections import deque
 from random import random
-from wall import wall
+from wall import Wall
 
 class agent:
 
