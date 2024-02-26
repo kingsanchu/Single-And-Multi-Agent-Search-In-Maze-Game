@@ -4,6 +4,7 @@ from powers import Pacman
 from agent import agent
 from pickup import Pickup
 from wall import Wall
+from gameImage import GameImage
 
 
 class Window():
@@ -17,7 +18,7 @@ class Window():
         self._width = 1000
         self._height = 850
         # All images used for the game are stored as a GameImage() object
-        # self._images = GameImage()
+        self._images = GameImage()
 
         # All Tkinter Settings Initialized #
         self._canvas = tk.Canvas(
