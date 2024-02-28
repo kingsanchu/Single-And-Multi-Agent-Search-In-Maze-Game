@@ -349,8 +349,8 @@ class Board():
                     game_row.append(Pickup(j, i, self.images, True))
 
                 # 5, 6, 7, 8
-                elif self[i][j] == Enemy.inky or self[i][j] == Enemy.blinky or self[i][j] == Enemy.pinky or self[i][j] == Enemy.clyde:
-                    game_row.append(Enemy(j, i, self[i][j], self.images))
+                elif self[i][j] == agent.inky or self[i][j] == agent.blinky or self[i][j] == agent.pinky or self[i][j] == agent.clyde:
+                    game_row.append(agent(j, i, self[i][j], self.images))
 
                 # 9
                 elif self[i][j] == Pacman.pacman:
@@ -470,3 +470,22 @@ class Board():
             print(enemy.enemy_type, enemy.y, enemy.x, enemy.pickup_memory)
 
             print('-' * 50)
+
+    # Level Functions #
+    def new_level(self):
+        ''' Called when a new level is needed. Alters the Gamestate (which consist of numbers)
+            to consist of Pacman game objects. Then update_objects() is called to fill the
+            game_ojects set with all the objects that are on the board. And the initial location
+            of Pacman is set. '''
+        score, lives, level = self.current_stats()
+        self.refresh_objects(level)
+
+        self.Gamestate = Board.create_board()
+        self.Gamestate = self._pacman_board(
+            self.square_height(), self.square_width())
+
+        self.update_board()
+
+        self.pacman = self.pacman_location()
+        self.pacman.level_up(score, lives, level)
+        self.enemies = {e for e in self.game_objects if type(e) == agent}
