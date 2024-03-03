@@ -3,7 +3,10 @@ from wall import Wall
 from powers import Pacman
 from pickup import Pickup
 
+
 class Board():
+    restricted_area = [(13, 11), (13, 16)]
+
     def __init__(self, width, height, images):
         self._window_width = width
         self._window_height = height
@@ -13,7 +16,7 @@ class Board():
         self.pacman = None
         self.enemies = set()
         self.game_objects = set()
-   
+
     def restore_enemies_previous_square(self, enemy):
         ''' Restores a pickup that an enemy went over because the way the game is organized,
             requires board updation, and an enemy overwrites a spot. Due to this, the enemy
@@ -489,3 +492,70 @@ class Board():
         self.pacman = self.pacman_location()
         self.pacman.level_up(score, lives, level)
         self.enemies = {e for e in self.game_objects if type(e) == agent}
+
+    def refresh_objects(self, level):
+        ''' This is to refresh the board and attributes of the game when a level
+            transitions to the next. '''
+        if level > 1:
+            self.enemies = set()
+            self.game_objects = set()
+
+    def level_complete(self) -> bool:
+        ''' Returns true or false if the total pickups on the board is 0.
+            If 0 the level is complete, otherwise the game is still going. '''
+        total_pickups = {p for p in self.game_objects if type(p) == Pickup}
+
+        return len(total_pickups) == 0
+
+    def current_stats(self) -> tuple:
+        # Game has already started and is transitioning to a new level
+        if self.Gamestate is not None:
+            return self.pacman.score, self.pacman.lives, self.pacman.level + 1
+        else:
+            # (0, 3, 1)
+            return Pacman.no_score, Pacman.three_lives, Pacman.level_one
+
+    def _game_continuation(self, y, x) -> None:
+        ''' Checks if Pacman is ongoing to an enemy, if so restarts the level due to death.
+            Otherwise, checks if the game is not over, and if so updates the board square.
+            Otherwise, Pacman's location become's None because the game is done. '''
+
+        if self._validate_upcoming_enemy(y, x):
+            if not self.pacman.invulnerable:
+                self.check_for_gameover()
+
+        else:
+            self._continuous_gameplay(y, x)
+
+    def _continuous_gameplay(self, y, x):
+        ''' While the game is not over, the board squares are updated accordingly. If
+            self._game_over returns True, then Pacman's location is set to None to show
+            the animation that he is dead and the game is done. '''
+        if not self.game_over:
+            self._update_board_square(y, x)
+
+            if _DEBUG:
+                pass
+                # self.surrounded_print()
+                # self.pacman_and_enemy_print()
+                # self.total_enemy_print()
+                # self.total_board_print()
+
+        else:
+            self[y][x] = None
+
+    def check_for_gameover(self):
+        ''' This function mainly checks for the progress of Pacman. If Pacman
+            dies and is out of lives, then the game is over. Otherwise, respawns
+            from the original spot. If Pacman is still alive, then the board is
+            just updated with his new position. '''
+        self.pacman.lose_life()  # Pacman loses a life on death
+
+        if not self.pacman.out_of_lives():
+            self.restore_gamestate()
+            self._update_board_for_respawn()
+        else:
+            self._game_over()
+
+    def _game_over(self):
+        self.game_over = True
