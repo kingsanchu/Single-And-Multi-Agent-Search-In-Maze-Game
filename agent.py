@@ -1,11 +1,11 @@
 from character import Character
 from wall import Wall
-import pacman
+from powers import Powers
 from collections import deque
 from random import random
 
 
-class agent(Character):
+class Agent(Character):
     inky = 5
     blinky = 6
     pinky = 7
@@ -23,7 +23,7 @@ class agent(Character):
         self.determine_image(enemy_type, images)
         self.pickup_memory = None
 
-        if enemy_type == agent.inky or enemy_type == agent.clyde:  # Only Inky and Clyde require these Attributes
+        if enemy_type == Agent.inky or enemy_type == Agent.clyde:  # Only Inky and Clyde require these Attributes
             self.movement_turns = 15
             self.last_choice = None
 
@@ -36,16 +36,16 @@ class agent(Character):
         ''' Image display to player is determined by which type of enemy it is. If the enemy
             is not invulnerable, then they all have the same common vulnerable ghost image. '''
         if self.invulnerable:
-            if enemy_type == agent.inky:
+            if enemy_type == Agent.inky:
                 self._image = images.return_image('inky')
 
-            elif enemy_type == agent.blinky:
+            elif enemy_type == Agent.blinky:
                 self._image = images.return_image('blinky')
 
-            elif enemy_type == agent.pinky:
+            elif enemy_type == Agent.pinky:
                 self._image = images.return_image('pinky')
 
-            elif enemy_type == agent.clyde:
+            elif enemy_type == Agent.clyde:
                 self._image = images.return_image('clyde')
 
         else:
@@ -66,16 +66,16 @@ class agent(Character):
             has their own unique game movement. '''
         start = self.x, self.y
 
-        if self.enemy_type == agent.blinky:
+        if self.enemy_type == Agent.blinky:
             self.blinky_movement(board, start, pacman)
 
-        elif self.enemy_type == agent.inky:
+        elif self.enemy_type == Agent.inky:
             self.inky_movement(board, start, pacman)
 
-        if self.enemy_type == agent.pinky:
+        if self.enemy_type == Agent.pinky:
             self.pinky_movement(board, start, pacman)
 
-        elif self.enemy_type == agent.clyde:
+        elif self.enemy_type == Agent.clyde:
             self.clyde_movement(board)
 
     # Inky Movement Functions #
@@ -185,7 +185,7 @@ class agent(Character):
             set to 0 so that he can make a random choice on which direction to go.
             Must specific if enemy is clyde, because Inky can have any three of the
             other enemy's directions, and this is not the case for him. '''
-        if self.enemy_type == agent.clyde:
+        if self.enemy_type == Agent.clyde:
             self.movement_turns = 0
             self.last_choice = None
 

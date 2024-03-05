@@ -1,5 +1,5 @@
 from maze import maze
-from agent import agent
+from agent import Agent
 from textLabel import textLabel
 from COLOR import COLOR
 from collections import deque
@@ -60,9 +60,9 @@ if __name__ == '__main__':
     searchPath, bfsPath, forwardPath = breadthFirstSearch(maze_instance)
     
     # Create agents
-    agent_a = agent(maze_instance, footprints=True, color=COLOR.yellow, shape='square', filled=True)
-    agent_b = agent(maze_instance, footprints=True, color=COLOR.red, shape='square', filled=False)
-    agent_c = agent(maze_instance, 1, 1, footprints=True, color=COLOR.green, shape='square', filled=True, goal=(maze_instance.rows, maze_instance.cols))
+    agent_a = Agent(maze_instance, footprints=True, color=COLOR.yellow, shape='square', filled=True)
+    agent_b = Agent(maze_instance, footprints=True, color=COLOR.red, shape='square', filled=False)
+    agent_c = Agent(maze_instance, 1, 1, footprints=True, color=COLOR.green, shape='square', filled=True, goal=(maze_instance.rows, maze_instance.cols))
     
     # Trace paths obtained from search algorithms
     maze_instance.tracePath({agent_a: searchPath}, delay=100)

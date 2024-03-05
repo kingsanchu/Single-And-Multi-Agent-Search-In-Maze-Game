@@ -1,6 +1,6 @@
-from agent import agent
+from agent import Agent
 from wall import Wall
-from powers import Pacman
+from powers import Powers
 from pickup import Pickup
 
 
@@ -165,7 +165,7 @@ class Board():
         if self.pacman.invulnerable:
 
             # Pacman.ticks (50) indicates Pacman barley became invulnerable
-            if self.pacman.invulnerable_ticks == Pacman.ticks:
+            if self.pacman.invulnerable_ticks == Powers.ticks:
                 self._update_enemy_states()
                 self.pacman.boost_running_out()
 
@@ -189,10 +189,10 @@ class Board():
             they past right by each other. '''
         if self.has_last_location(self.pacman):
             dy, dx = self.pacman.last_location
-            return type(self[dy][dx]) == agent
+            return type(self[dy][dx]) == Agent
 
     def _validate_upcoming_enemy_in_square(self, game_object, previous_y, previous_x):
-        return type(game_object) == Pacman and type(self[previous_y][previous_x]) == agent and \
+        return type(game_object) == Powers and type(self[previous_y][previous_x]) == Agent and \
             not game_object.invulnerable
 
     def _validate_movement(self, y, x):
@@ -252,10 +252,10 @@ class Board():
 
     # Individual Game Object Settings #
 
-    def pacman_location(self) -> Pacman:
+    def pacman_location(self) -> Powers:
         ''' Returns the Pacman object on the board. '''
         for game_obj in self.game_objects:
-            if type(game_obj) == Pacman:
+            if type(game_obj) == Powers:
                 return game_obj
 
     def location_has_changed(self, game_object, last_location) -> bool:
@@ -312,10 +312,10 @@ class Board():
             new_row = []
             for j in range(len(self[i])):
 
-                if type(self[i][j]) == Pacman:
+                if type(self[i][j]) == Powers:
                     new_row.append(None)
 
-                elif type(self[i][j]) == agent:
+                elif type(self[i][j]) == Agent:
 
                     if self[i][j].pickup_memory is not None:
                         new_row.append(self[i][j].pickup_memory)
@@ -352,12 +352,12 @@ class Board():
                     game_row.append(Pickup(j, i, self.images, True))
 
                 # 5, 6, 7, 8
-                elif self[i][j] == agent.inky or self[i][j] == agent.blinky or self[i][j] == agent.pinky or self[i][j] == agent.clyde:
-                    game_row.append(agent(j, i, self[i][j], self.images))
+                elif self[i][j] == Agent.inky or self[i][j] == Agent.blinky or self[i][j] == Agent.pinky or self[i][j] == Agent.clyde:
+                    game_row.append(Agent(j, i, self[i][j], self.images))
 
                 # 9
-                elif self[i][j] == Pacman.pacman:
-                    game_row.append(Pacman(j, i, self.images))
+                elif self[i][j] == Powers.pacman:
+                    game_row.append(Powers(j, i, self.images))
 
                 else:
                     game_row.append(None)
@@ -491,7 +491,7 @@ class Board():
 
         self.pacman = self.pacman_location()
         self.pacman.level_up(score, lives, level)
-        self.enemies = {e for e in self.game_objects if type(e) == agent}
+        self.enemies = {e for e in self.game_objects if type(e) == Agent}
 
     def refresh_objects(self, level):
         ''' This is to refresh the board and attributes of the game when a level
@@ -513,7 +513,7 @@ class Board():
             return self.pacman.score, self.pacman.lives, self.pacman.level + 1
         else:
             # (0, 3, 1)
-            return Pacman.no_score, Pacman.three_lives, Pacman.level_one
+            return Powers.no_score, Powers.three_lives, Powers.level_one
 
     def _game_continuation(self, y, x) -> None:
         ''' Checks if Pacman is ongoing to an enemy, if so restarts the level due to death.

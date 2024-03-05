@@ -1,5 +1,5 @@
 from maze import maze
-from agent import agent
+from agent import Agent
 from textLabel import textLabel
 from queue import PriorityQueue
 from COLOR import COLOR
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     maze_instance.CreateMaze(theme='light')
     path = dijkstraPathFinding(maze_instance)
 
-    agent_a = agent(maze_instance, footprints=True, color=COLOR.red)
+    agent_a = Agent(maze_instance, footprints=True, color=COLOR.red)
     maze_instance.tracePath({agent_a: path})
 
     label = textLabel(maze_instance, 'Dijkstra (Path Length)', len(path) + 1)

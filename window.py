@@ -1,10 +1,10 @@
 import tkinter as tk
 from board import Board
-from powers import Pacman
-from agent import agent
+from gameImage import GameImage
+from powers import Powers
+from agent import Agent
 from pickup import Pickup
 from wall import Wall
-from gameImage import GameImage
 
 
 class Window():
@@ -63,7 +63,7 @@ class Window():
                                                total_height + 1) * total_height,
                                               fill='blue', width=0)
 
-            elif type(game_obj) == Pickup or type(game_obj) == Pacman or type(game_obj) == agent:
+            elif type(game_obj) == Pickup or type(game_obj) == Powers or type(game_obj) == Agent:
                 self._canvas.create_image(game_obj.x * total_width + (total_width / 2),
                                           game_obj.y * total_height + (total_height / 2), image=game_obj._image)
 

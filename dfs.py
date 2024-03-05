@@ -1,5 +1,5 @@
 from maze import maze
-from agent import agent
+from agent import Agent
 from textLabel import textLabel
 from COLOR import COLOR
 
@@ -66,9 +66,9 @@ if __name__ == '__main__':
     # (5,1) is Start Cell, Change that to any other valid cell
     dfs_search, dfs_path, forward_path = depthFirstSearch(maze_instance, (5, 1))
 
-    agent_a = agent(maze_instance, 5, 1, goal=(2, 4), footprints=True, shape='square', color=COLOR.yellow)
-    agent_b = agent(maze_instance, 2, 4, goal=(5, 1), footprints=True, filled=True, color=COLOR.green)
-    agent_c = agent(maze_instance, 5, 1, footprints=True, color=COLOR.blue)
+    agent_a = Agent(maze_instance, 5, 1, goal=(2, 4), footprints=True, shape='square', color=COLOR.yellow)
+    agent_b = Agent(maze_instance, 2, 4, goal=(5, 1), footprints=True, filled=True, color=COLOR.green)
+    agent_c = Agent(maze_instance, 5, 1, footprints=True, color=COLOR.blue)
 
     maze_instance.tracePath({agent_a: dfs_search}, showMarked=True)
     maze_instance.tracePath({agent_b: dfs_path})

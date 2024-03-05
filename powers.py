@@ -1,5 +1,5 @@
 from character import Character
-from agent import agent
+from agent import Agent
 from wall import Wall
 from pickup import Pickup
 
