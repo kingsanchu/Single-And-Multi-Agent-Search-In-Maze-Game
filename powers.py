@@ -4,7 +4,7 @@ from wall import Wall
 from pickup import Pickup
 
 
-class Pacman(Character):
+class Powers(Character):
     pacman = 9
     ticks = 50
     no_score = 0
@@ -13,16 +13,16 @@ class Pacman(Character):
 
     def __init__(self, x, y, images, direction='Left'):
         Character.__init__(self, x, y, direction)
-        self.score = Pacman.no_score
-        self.life_score = Pacman.no_score
-        self.lives = Pacman.three_lives
-        self.level = Pacman.level_one
+        self.score = Powers.no_score
+        self.life_score = Powers.no_score
+        self.lives = Powers.three_lives
+        self.level = Powers.level_one
 
         self.last_direction, self.next_direction = 'Left', None
         self.is_respawning = False
         self.direction_image(images)
 
-        self.invulnerable_ticks = Pacman.ticks
+        self.invulnerable_ticks = Powers.ticks
 
     # Game Progression Functions #
     def contact(self, gameObj):
@@ -67,7 +67,7 @@ class Pacman(Character):
         if not self.invulnerable:
             self.invulnerability()
         else:
-            self.invulnerable_ticks = Pacman.ticks - 1
+            self.invulnerable_ticks = Powers.ticks - 1
 
     # Attribute Functions #
     def level_up(self, score, lives, level) -> None:
@@ -88,7 +88,7 @@ class Pacman(Character):
     def normal_state(self) -> None:
         ''' When Pacman is not invulnerable, his ticks are refreshed to default,
             and his invulnerable state is set to False by the invulnerability() call.'''
-        self.invulnerable_ticks = Pacman.ticks
+        self.invulnerable_ticks = Powers.ticks
         self.invulnerability()
 
     # Direction Functions #
