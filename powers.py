@@ -38,7 +38,7 @@ class Powers(Character):
             else:
                 self.score += 10
 
-        elif type(gameObj) == Enemy:
+        elif type(gameObj) == Agent:
             if self.invulnerable:
                 self.score += 100
 
