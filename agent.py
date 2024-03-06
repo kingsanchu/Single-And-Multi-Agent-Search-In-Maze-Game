@@ -1,6 +1,5 @@
 from character import Character
 from wall import Wall
-from powers import Powers
 from collections import deque
 from random import random
 
@@ -61,31 +60,31 @@ class Agent(Character):
         else:
             return self.breadth_first_search(board, start, self.start_location[1], self.start_location[0])[:-1]
 
-    def determineDirection(self, board, pacman) -> None:
+    def determineDirection(self, board, powers) -> None:
         ''' Direction is determined by the enemy type. Since each enemy type
             has their own unique game movement. '''
         start = self.x, self.y
 
         if self.enemy_type == Agent.blinky:
-            self.blinky_movement(board, start, pacman)
+            self.blinky_movement(board, start, powers)
 
         elif self.enemy_type == Agent.inky:
-            self.inky_movement(board, start, pacman)
+            self.inky_movement(board, start, powers)
 
         if self.enemy_type == Agent.pinky:
-            self.pinky_movement(board, start, pacman)
+            self.pinky_movement(board, start, powers)
 
         elif self.enemy_type == Agent.clyde:
             self.clyde_movement(board)
 
     # Inky Movement Functions #
-    def blinky_movement(self, board, start, pacman) -> None:
+    def blinky_movement(self, board, start, powers) -> None:
         ''' Blinky's movement is to directly chase Pacman on the board. '''
-        path = self.determine_path(board, start, pacman.y, pacman.x)
+        path = self.determine_path(board, start, powers.y, powers.x)
         self.path_finding_direction(path)
 
     # Blinky Movement Functions #
-    def inky_movement(self, board, start, pacman) -> None:
+    def inky_movement(self, board, start, powers) -> None:
         ''' Inky's movement differentiates between the other three ghost. So we use
             random() from the random library to determine which movement he will follow,
             and it will constantly be changing as time goes on. '''
@@ -93,47 +92,47 @@ class Agent(Character):
         self._inky_and_clyde_movement_turns()
 
         if choice <= .33:
-            self.blinky_movement(board, start, pacman)
+            self.blinky_movement(board, start, powers)
 
         elif choice <= .75:
             self.clyde_movement(board)
 
         elif choice <= 1:
-            self.pinky_movement(board, start, pacman)
+            self.pinky_movement(board, start, powers)
 
     # Pinky Movement Functions #
 
-    def pinky_movement(self, board, start, pacman):
+    def pinky_movement(self, board, start, powers):
         ''' Pinky's movement is meant to ambush, so we have the entire pacman object
             so that are we able to look at his direction and coordinates. '''
-        endpoint_y, endpoint_x = self.pinky_endpoints(board, pacman)
+        endpoint_y, endpoint_x = self.pinky_endpoints(board, powers)
         path = self.determine_path(board, start, endpoint_y, endpoint_x)
 
         self.path_finding_direction(path)
 
-    def pinky_endpoints(self, board, pacman) -> tuple:
+    def pinky_endpoints(self, board, powers) -> tuple:
         ''' This function primarily just returns the endpoints from the method
             pinky_avoiding_wall. The difference is that it accounts for the direction
             and adds a change in x or y depending on that direction. '''
-        if pacman.direction == 'Left':
-            return self.pinky_ambush(board, pacman, 0, -1)
+        if powers.direction == 'Left':
+            return self.pinky_ambush(board, powers, 0, -1)
 
-        elif pacman.direction == 'Right':
-            return self.pinky_ambush(board, pacman, 0, 1)
+        elif powers.direction == 'Right':
+            return self.pinky_ambush(board, powers, 0, 1)
 
-        elif pacman.direction == 'Up':
-            return self.pinky_ambush(board, pacman, -1, 0)
+        elif powers.direction == 'Up':
+            return self.pinky_ambush(board, powers, -1, 0)
 
-        elif pacman.direction == 'Down':
-            return self.pinky_ambush(board, pacman, 1, 0)
+        elif powers.direction == 'Down':
+            return self.pinky_ambush(board, powers, 1, 0)
 
-    def pinky_ambush(self, board, pacman, dy, dx) -> tuple:
+    def pinky_ambush(self, board, powers, dy, dx) -> tuple:
         ''' This function is used to get ahead of Pacman to ambush him.
             The max distance to get ahead is set in the local variable
             ambush_limit. The ambush limit is less if ahead of Pacman
             is a wall, or the distance is not within board boundaries. '''
         ambush_limit = 7
-        endpoint_y, endpoint_x = pacman.return_location()
+        endpoint_y, endpoint_x = powers.return_location()
 
         if self.pacman_within_pinky_proximity(endpoint_y, endpoint_x, ambush_limit):
             return endpoint_y, endpoint_x

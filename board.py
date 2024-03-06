@@ -3,7 +3,7 @@ from wall import Wall
 from powers import Powers
 from pickup import Pickup
 
-
+_DEBUG = False
 class Board():
     restricted_area = [(13, 11), (13, 16)]
 
@@ -16,6 +16,8 @@ class Board():
         self.pacman = None
         self.enemies = set()
         self.game_objects = set()
+
+        self.game_over = False
 
     def restore_enemies_previous_square(self, enemy):
         ''' Restores a pickup that an enemy went over because the way the game is organized,
