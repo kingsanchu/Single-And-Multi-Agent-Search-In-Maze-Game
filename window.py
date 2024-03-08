@@ -15,8 +15,8 @@ class Window():
         the GUI accordingly to the progression of the game, by the use of the Board
         object attribute initialized here. '''
         self._master = master
-        self._width = 1000
-        self._height = 850
+        self._width = 720   
+        self._height = 720
         # All images used for the game are stored as a GameImage() object
         self._images = GameImage()
 
