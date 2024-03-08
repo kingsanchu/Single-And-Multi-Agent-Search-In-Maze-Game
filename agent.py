@@ -265,7 +265,6 @@ class Agent(Character):
 
         else:
             self.movement()
-            self.slowed_down = True
 
     # Pathfinding Functions #
     def path_finding_direction(self, path):
