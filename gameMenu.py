@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from subprocess import Popen
 
 class MainMenu(tk.Frame):
     def __init__(self, master=None):
@@ -29,12 +29,14 @@ class MainMenu(tk.Frame):
         self.master.destroy()  # Close the application
 
 
+
 class DifficultyPage(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
         self.pack()
         self.create_widgets()
+
     def create_widgets(self):
         self.label = tk.Label(self, text="Select Difficulty:")
         self.label.pack(pady=10)
@@ -59,8 +61,13 @@ class DifficultyPage(tk.Frame):
         self.quit_button.pack(side="bottom")
 
     def start_game(self):
-        print(f"Game started with difficulty: {self.difficulty_var.get()}")
-        # Add your game start logic here
+        selected_difficulty = self.difficulty_var.get()
+        print(f"Game started with difficulty: {selected_difficulty}")
+        if selected_difficulty == "Hard":
+            print("Running the game with Hard difficulty...")
+            Popen(["python", "main.py"])  # Run main.py in a new process
+        else:
+            print("Add your game start logic here for other difficulties")
 
     def show_main_menu(self):
         self.destroy()  # Destroy the current frame (difficulty page)
