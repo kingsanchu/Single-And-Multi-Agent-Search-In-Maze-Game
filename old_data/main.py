@@ -1,7 +1,7 @@
 # @author Steven CHU
 
 from maze_data import small_maze_data, medium_maze_data, large_maze_data
-from a_star_search import Algorithms
+from old_data.a_star_search import Algorithms
 
 class Player:
     # Record if the player or cell visited the coordinates or not.

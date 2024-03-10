@@ -1,7 +1,7 @@
-from maze import maze
+from old_data.maze import maze
 from agent import Agent
-from textLabel import textLabel
-from COLOR import COLOR
+from old_data.textLabel import textLabel
+from old_data.COLOR import COLOR
 
 def depthFirstSearch(self, start=None):
     """

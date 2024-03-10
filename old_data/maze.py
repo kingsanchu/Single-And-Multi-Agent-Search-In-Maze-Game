@@ -3,9 +3,9 @@ import datetime
 import csv
 import os
 from tkinter import *
-from COLOR import COLOR
+from old_data.COLOR import COLOR
 from agent import Agent
-from textLabel import textLabel
+from old_data.textLabel import textLabel
 from collections import deque
 
 

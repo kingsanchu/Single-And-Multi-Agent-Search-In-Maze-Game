@@ -1,8 +1,8 @@
-from maze import maze
+from old_data.maze import maze
 from agent import Agent
-from textLabel import textLabel
+from old_data.textLabel import textLabel
 from queue import PriorityQueue
-from COLOR import COLOR
+from old_data.COLOR import COLOR
 def heuristic(cell1, cell2):
     """
     Calculates the heuristic (Manhattan distance) between two cells.
