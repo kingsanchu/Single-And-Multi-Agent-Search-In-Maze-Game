@@ -4,6 +4,8 @@ from powers import Powers
 from pickup import Pickup
 
 _DEBUG = False
+
+
 class Board():
     restricted_area = [(13, 11), (13, 16)]
 
@@ -16,8 +18,12 @@ class Board():
         self.pacman = None
         self.enemies = set()
         self.game_objects = set()
+        self.algorithm = "BFS"
 
         self.game_over = False
+
+    def set_algorithm(self, algorithm):
+        self.algorithm = algorithm
 
     def restore_enemies_previous_square(self, enemy):
         ''' Restores a pickup that an enemy went over because the way the game is organized,
@@ -355,7 +361,8 @@ class Board():
 
                 # 5, 6, 7, 8
                 elif self[i][j] == Agent.inky or self[i][j] == Agent.blinky or self[i][j] == Agent.pinky or self[i][j] == Agent.clyde:
-                    game_row.append(Agent(j, i, self[i][j], self.images))
+                    game_row.append(
+                        Agent(j, i, self[i][j], self.images, self.algorithm))
 
                 # 9
                 elif self[i][j] == Powers.pacman:

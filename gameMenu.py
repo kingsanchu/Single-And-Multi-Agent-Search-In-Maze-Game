@@ -1,5 +1,7 @@
 import tkinter as tk
 from subprocess import Popen
+from agent import Agent
+
 
 class MainMenu(tk.Frame):
     def __init__(self, master=None):
@@ -29,7 +31,6 @@ class MainMenu(tk.Frame):
         self.master.destroy()  # Close the application
 
 
-
 class DifficultyPage(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -38,17 +39,17 @@ class DifficultyPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.label = tk.Label(self, text="Select Difficulty:")
+        self.label = tk.Label(self, text="Select Algorithm:")
         self.label.pack(pady=10)
 
-        self.difficulty_var = tk.StringVar()
-        self.difficulty_var.set("Easy")  # Default difficulty
+        self.algorithm_var = tk.StringVar()
+        self.algorithm_var.set("BFS")  # Default algorithm
 
-        difficulties = ["Easy", "Medium", "Hard"]
+        algorithms = ["BFS", "AStar", "Dijkstra", "DFS"]  # Add AStar and Dijkstra algorithms
 
-        for difficulty in difficulties:
-            tk.Radiobutton(self, text=difficulty,
-                           variable=self.difficulty_var, value=difficulty).pack()
+        for algorithm in algorithms:
+            tk.Radiobutton(self, text=algorithm,
+                           variable=self.algorithm_var, value=algorithm).pack()
 
         self.start_button = tk.Button(
             self, text="Start Game", command=self.start_game)
@@ -60,14 +61,41 @@ class DifficultyPage(tk.Frame):
         self.quit_button = tk.Button(self, text="Quit", command=self.quit_game)
         self.quit_button.pack(side="bottom")
 
+
     def start_game(self):
-        selected_difficulty = self.difficulty_var.get()
-        print(f"Game started with difficulty: {selected_difficulty}")
-        if selected_difficulty == "Hard":
-            print("Running the game with Hard difficulty...")
-            Popen(["python", "main.py"])  # Run main.py in a new process
+        selected_algorithm = self.algorithm_var.get()
+        print(f"Game started with algorithm: {selected_algorithm}")
+
+    # Add your logic here to start the game based on the selected algorithm
+        if selected_algorithm == "AStar":
+            print("Starting game with A* algorithm...")
+            Popen(["python", "main.py", "--algorithm", "AStar"])
+        # Example: game.start_with_astar(agent)
+        elif selected_algorithm == "DFS":
+            print("Starting game with Depth-First Search algorithm...")
+            Popen(["python", "main.py", "--algorithm", "DFS"])
+
+        # Example: game.start_with_dfs(agent)
+        elif selected_algorithm == "BFS":
+            print("Starting game with Breadth-First Search algorithm...")
+            Popen(["python", "main.py", "--algorithm", "BFS"])
+        # Example: game.start_with_bfs(agent)
+        elif selected_algorithm == "Dijkstra":
+            print("Starting game with Dijkstra's algorithm...")
+            Popen(["python", "main.py", "--algorithm", "Dijkstra"])
+        # Example: game.start_with_random(agent)
         else:
-            print("Add your game start logic here for other difficulties")
+            print("Invalid algorithm selected!")
+
+    # You can replace the print statements with actual function calls or game logic
+        #selected_difficulty = self.difficulty_var.get()
+        #print(f"Game started with difficulty: {selected_difficulty}")
+        #if selected_difficulty == "Hard":
+        #    print("Running the game with Hard difficulty...")
+        #    # Pass selected difficulty level to main.py
+        #    Popen(["python", "main.py", "--difficulty", "hard"])
+        #else:
+        #    print("Add your game start logic here for other difficulties")
 
     def show_main_menu(self):
         self.destroy()  # Destroy the current frame (difficulty page)

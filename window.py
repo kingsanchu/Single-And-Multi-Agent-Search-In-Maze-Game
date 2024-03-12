@@ -1,4 +1,5 @@
 import tkinter as tk
+from collections import deque
 from board import Board
 from gameImage import GameImage
 from powers import Powers
@@ -15,7 +16,7 @@ class Window():
         the GUI accordingly to the progression of the game, by the use of the Board
         object attribute initialized here. '''
         self._master = master
-        self._width = 720   
+        self._width = 720
         self._height = 720
         # All images used for the game are stored as a GameImage() object
         self._images = GameImage()
@@ -217,6 +218,9 @@ class Window():
         ''' Pauses or unpauses the game by pressing the esc key. '''
         self._pause = not self._pause
     # Main Functions #
+
+    def set_algorithm(self, algorithm: str) -> None:
+        self.board.set_algorithm(algorithm)
 
     def update(self) -> None:
         '''
