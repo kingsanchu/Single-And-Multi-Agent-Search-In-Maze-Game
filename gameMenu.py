@@ -87,16 +87,6 @@ class DifficultyPage(tk.Frame):
         else:
             print("Invalid algorithm selected!")
 
-    # You can replace the print statements with actual function calls or game logic
-        #selected_difficulty = self.difficulty_var.get()
-        #print(f"Game started with difficulty: {selected_difficulty}")
-        #if selected_difficulty == "Hard":
-        #    print("Running the game with Hard difficulty...")
-        #    # Pass selected difficulty level to main.py
-        #    Popen(["python", "main.py", "--difficulty", "hard"])
-        #else:
-        #    print("Add your game start logic here for other difficulties")
-
     def show_main_menu(self):
         self.destroy()  # Destroy the current frame (difficulty page)
         MainMenu(self.master).pack()  # Recreate and pack the main menu
