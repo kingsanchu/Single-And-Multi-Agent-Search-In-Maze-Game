@@ -10,7 +10,7 @@ from wall import Wall
 
 class Window():
 
-    def __init__(self, master):
+    def __init__(self, master, algorithm, maze_size):
         '''
         Initializes a Window Object that is the GUI for Pacman. The Window updates
         the GUI accordingly to the progression of the game, by the use of the Board
@@ -46,6 +46,8 @@ class Window():
 
         # Pacman Board Initialized #
         self.board = Board(self._width, self._height, self._images)
+        self.board.set_algorithm(algorithm)
+        self.board.set_maze_size(maze_size)
         self.board.new_level()          # Initializes a new level for Pacman
 
     # Drawing Functions #
@@ -218,9 +220,6 @@ class Window():
         ''' Pauses or unpauses the game by pressing the esc key. '''
         self._pause = not self._pause
     # Main Functions #
-
-    def set_algorithm(self, algorithm: str) -> None:
-        self.board.set_algorithm(algorithm)
 
     def update(self) -> None:
         '''

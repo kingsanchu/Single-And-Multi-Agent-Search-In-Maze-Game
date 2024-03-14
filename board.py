@@ -5,7 +5,6 @@ from pickup import Pickup
 
 _DEBUG = False
 
-
 class Board():
     restricted_area = [(13, 11), (13, 16)]
 
@@ -18,12 +17,16 @@ class Board():
         self.pacman = None
         self.enemies = set()
         self.game_objects = set()
-        self.algorithm = "BFS"
+        self.algorithm = ""
+        self.maze_size = ""
 
         self.game_over = False
 
     def set_algorithm(self, algorithm):
         self.algorithm = algorithm
+
+    def set_maze_size(self, maze_size):
+        self.maze_size = maze_size
 
     def restore_enemies_previous_square(self, enemy):
         ''' Restores a pickup that an enemy went over because the way the game is organized,
@@ -376,67 +379,120 @@ class Board():
         return game_board
 
     @classmethod
-    def create_board(self):
-        # Sets up the board with the numbers, that will represent the objects
-        new_board = \
-            [[0 for i in range(28)],
-             ([0] + [1 for i in range(12)] + [0]) * 2,
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
-                 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
-                 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0,
-                    0, 0, 0, 1, 0, 0, 0, 0, 1, 0],  # replace 9 with 1
-                [0] + [1 for i in range(26)] + [0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
-                 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
-                 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0,
-                 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0,
-                 None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0,
-                 None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None,
-                 None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0,
-                 0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None,
-                 None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [None, None, None, None, None, None, 1, 0, 0, None, 0, None, None, None,
-                 None, None, None, 0, None, 0, 0, 1, None, None, None, None, None, None],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7,
-                 8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0,
-                 0, 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None],
-                [None, None, None, None, None, 0, 1, 0, 0, None, None, None, None, None,
-                 None, None, None, None, None, 0, 0, 1, 0, None, None, None, None, None],
-                [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
-                 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None, None],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
-                 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+    def create_board(self, maze_size):
+        print(maze_size)
+    #     Sets up the board with the numbers, that will represent the objects
+        if maze_size == "Small":
+            small_board = \
+                [[0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0, 0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, None, None, None, None, None, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, None, None, None, None, None, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7, 8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
                 ([0] + [1 for i in range(12)] + [0]) * 2,
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
-                 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
-                 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 3, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, None, 9,
-                 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 3, 0, 0],
-                [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
-                 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-                [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
-                 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-                [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0,
-                 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
-                [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-                 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-                 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)], 
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)]]
+
+            return small_board
+    
+        elif maze_size == "Medium":
+            medium_board = \
+                [[0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0] + [1 for i in range(26)] + [0],
+                [0, 3, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 3, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0, 0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 3, None, None, None, None, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, None, None, None, None, 3, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7, 8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                ([0] + [1 for i in range(12)] + [0]) * 2,
+                [0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, None, 9, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+                [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0],
+                [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0],
+                [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
+                [0 for i in range(28)], 
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)],
+                [0 for i in range(28)]]
+
+            return medium_board
+    
+        elif maze_size == "Large":
+            large_board = \
+                [[0 for i in range(28)],
+                ([0] + [1 for i in range(12)] + [0]) * 2,
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],  # replace 9 with 1
+                [0] + [1 for i in range(26)] + [0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0, 0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [None, None, None, None, None, None, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, None, None, None, None, None, None],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7, 8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None],
+                [None, None, None, None, None, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, None, None, None, None, None],
+                [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None, None],
+                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                ([0] + [1 for i in range(12)] + [0]) * 2,
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 3, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, None, 9, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 3, 0, 0],
+                [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+                [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+                [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
+                [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
                 [0] + [1 for i in range(26)] + [0],
                 [0 for i in range(28)]]
 
-        return new_board
+            return large_board
+        else:
+            print("No maze size selected")
 
     # ===== debug functions =====
 
@@ -492,7 +548,7 @@ class Board():
         score, lives, level = self.current_stats()
         self.refresh_objects(level)
 
-        self.Gamestate = Board.create_board()
+        self.Gamestate = Board.create_board(self.maze_size)
         self.Gamestate = self._pacman_board(
             self.square_height(), self.square_width())
 
