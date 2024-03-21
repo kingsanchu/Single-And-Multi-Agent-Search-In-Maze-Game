@@ -36,6 +36,8 @@ class MazeSizeAndDifficultyPage(tk.Frame):
         super().__init__(master)
         self.master = master
         self.pack()
+        self.root = root
+        self.root.geometry("720x500")
         self.create_widgets()
 
     def create_widgets(self):
@@ -58,7 +60,7 @@ class MazeSizeAndDifficultyPage(tk.Frame):
         self.algorithm_var.set("BFS")  # Default algorithm
 
         # Add AStar and Dijkstra algorithms
-        algorithms = ["BFS", "AStar", "Dijkstra", "DFS"]
+        algorithms = ["BFS", "AStar", "Dijkstra", "DFS", "Adversarial Minimax", "Alpha-beta Pruning", "Expectimax"]
 
         for algorithm in algorithms:
             tk.Radiobutton(self, text=algorithm,
@@ -98,6 +100,15 @@ class MazeSizeAndDifficultyPage(tk.Frame):
             # Example: game.start_with_bfs(agent)
             elif selected_algorithm == "Dijkstra":
                 print("Starting game with Dijkstra's algorithm...")
+
+            elif selected_algorithm == "Adversarial Minimax":
+                print("Starting game with Adversarial Minimax algorithm...")
+
+            elif selected_algorithm == "Alpha-beta Pruning":
+                print("Starting game with Alpha-beta Pruning algorithm...")
+
+            elif selected_algorithm == "Expectimax":
+                print("Starting game with Expectimax algorithm...")
 
             Popen(["python", "main.py", "--algorithm", selected_algorithm, "--size", selected_maze_size])
 

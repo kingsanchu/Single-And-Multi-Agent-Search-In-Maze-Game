@@ -1,9 +1,10 @@
 from agent import Agent
 from wall import Wall
-from powers import Powers
+from pacman import Pacman
 from pickup import Pickup
 
-_DEBUG = False
+_DEBUG = True
+
 
 class Board():
     restricted_area = [(13, 11), (13, 16)]
@@ -176,7 +177,7 @@ class Board():
         if self.pacman.invulnerable:
 
             # Pacman.ticks (50) indicates Pacman barley became invulnerable
-            if self.pacman.invulnerable_ticks == Powers.ticks:
+            if self.pacman.invulnerable_ticks == Pacman.ticks:
                 self._update_enemy_states()
                 self.pacman.boost_running_out()
 
@@ -203,7 +204,7 @@ class Board():
             return type(self[dy][dx]) == Agent
 
     def _validate_upcoming_enemy_in_square(self, game_object, previous_y, previous_x):
-        return type(game_object) == Powers and type(self[previous_y][previous_x]) == Agent and \
+        return type(game_object) == Pacman and type(self[previous_y][previous_x]) == Agent and \
             not game_object.invulnerable
 
     def _validate_movement(self, y, x):
@@ -237,15 +238,15 @@ class Board():
             automatically updates enemy positions. '''
         for enemy in self.enemies:
             enemy.determineDirection(self, self.pacman)
-            self._validate_enemy_position(enemy, pacman_y, pacman_x)
+            self._validate_enemy_position(enemy, self.pacman)
 
-    def _validate_enemy_position(self, enemy, pacman_y, pacman_x):
+    def _validate_enemy_position(self, enemy, pacman: Pacman):
         ''' Checks if the position of the enemy is the same position as Pacman, if so then
             calls the function check_for_gameover(). Else it's just going to update the
             board with the enemy. '''
         self._update_previous_board_square(enemy)
 
-        if (enemy.y, enemy.x) == (pacman_y, pacman_x):
+        if (enemy.y, enemy.x) == (pacman.y, pacman.x):
             self._validate_enemy_death_or_kill(enemy)
 
         else:
@@ -263,10 +264,10 @@ class Board():
 
     # Individual Game Object Settings #
 
-    def pacman_location(self) -> Powers:
+    def pacman_location(self) -> Pacman:
         ''' Returns the Pacman object on the board. '''
         for game_obj in self.game_objects:
-            if type(game_obj) == Powers:
+            if type(game_obj) == Pacman:
                 return game_obj
 
     def location_has_changed(self, game_object, last_location) -> bool:
@@ -323,7 +324,7 @@ class Board():
             new_row = []
             for j in range(len(self[i])):
 
-                if type(self[i][j]) == Powers:
+                if type(self[i][j]) == Pacman:
                     new_row.append(None)
 
                 elif type(self[i][j]) == Agent:
@@ -368,8 +369,8 @@ class Board():
                         Agent(j, i, self[i][j], self.images, self.algorithm))
 
                 # 9
-                elif self[i][j] == Powers.pacman:
-                    game_row.append(Powers(j, i, self.images))
+                elif self[i][j] == Pacman.pacman:
+                    game_row.append(Pacman(j, i, self.images))
 
                 else:
                     game_row.append(None)
@@ -380,115 +381,175 @@ class Board():
 
     @classmethod
     def create_board(self, maze_size):
-        print(maze_size)
     #     Sets up the board with the numbers, that will represent the objects
         if maze_size == "Small":
             small_board = \
                 [[0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0, 0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, None, None, None, None, None, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, None, None, None, None, None, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7, 8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                ([0] + [1 for i in range(12)] + [0]) * 2,
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)], 
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)]]
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0,
+                     None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0,
+                     None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None,
+                     None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0,
+                     0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None,
+                     None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, None, None, None, None, None, 1, 0, 0, None, 0, None, None, None,
+                     None, None, None, 0, None, 0, 0, 1, None, None, None, None, None, 0],
+                 #ghost row
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5,6,7,
+                     8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
+                     0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None,
+                     None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
+                     0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
+                     0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 ([0] + [1 for i in range(12)] + [0]) * 2,
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, None, 9,
+                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 0],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)]]
 
             return small_board
-    
+
         elif maze_size == "Medium":
             medium_board = \
                 [[0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0] + [1 for i in range(26)] + [0],
-                [0, 3, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 3, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0, 0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 3, None, None, None, None, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, None, None, None, None, 3, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7, 8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                ([0] + [1 for i in range(12)] + [0]) * 2,
-                [0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, None, 9, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0],
-                [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0],
-                [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0],
-                [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-                [0 for i in range(28)], 
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)],
-                [0 for i in range(28)]]
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0] + [1 for i in range(26)] + [0],
+                 [0, 3, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 3, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0,
+                     1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0,
+                     None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0,
+                     None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None,
+                     None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0,
+                     0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None,
+                     None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 3, None, None, None, None, 1, 0, 0, None, 0, None, None, None,
+                     None, None, None, 0, None, 0, 0, 1, None, None, None, None, 3, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7,
+                     8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
+                     0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None,
+                     None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
+                     0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
+                     0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 ([0] + [1 for i in range(12)] + [0]) * 2,
+                 [0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, None, 9,
+                     1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+                 [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0],
+                 [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0],
+                 [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)],
+                 [0 for i in range(28)]]
 
             return medium_board
-    
+
         elif maze_size == "Large":
             large_board = \
                 [[0 for i in range(28)],
-                ([0] + [1 for i in range(12)] + [0]) * 2,
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],  # replace 9 with 1
-                [0] + [1 for i in range(26)] + [0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0, None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0, 0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [None, None, None, None, None, None, 1, 0, 0, None, 0, None, None, None, None, None, None, 0, None, 0, 0, 1, None, None, None, None, None, None],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7, 8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None],
-                [None, None, None, None, None, 0, 1, 0, 0, None, None, None, None, None, None, None, None, None, None, 0, 0, 1, 0, None, None, None, None, None],
-                [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None, None],
-                [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                ([0] + [1 for i in range(12)] + [0]) * 2,
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-                [0, 3, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, None, 9, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 3, 0, 0],
-                [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-                [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
-                [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
-                [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-                [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-                [0] + [1 for i in range(26)] + [0],
-                [0 for i in range(28)]]
+                 ([0] + [1 for i in range(12)] + [0]) * 2,
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0,
+                     0, 0, 0, 1, 0, 0, 0, 0, 1, 0],  # replace 9 with 1
+                 [0] + [1 for i in range(26)] + [0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0,
+                     1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0,
+                     None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, None, 0, 0,
+                     None, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, None, None, None, None,
+                     None, None, None, None, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 0, 0, 0,
+                     0, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, None, None,
+                     None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [None, None, None, None, None, None, 1, 0, 0, None, 0, None, None, None,
+                     None, None, None, 0, None, 0, 0, 1, None, None, None, None, None, None],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7,
+                     8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0,
+                     0, 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None],
+                 [None, None, None, None, None, 0, 1, 0, 0, None, None, None, None, None,
+                     None, None, None, None, None, 0, 0, 1, 0, None, None, None, None, None],
+                 [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0,
+                     0, 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None, None],
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
+                     0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                 ([0] + [1 for i in range(12)] + [0]) * 2,
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                 [0, 3, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, None, 9,
+                     1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 3, 0, 0],
+                 [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+                 [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+                 [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0,
+                     1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                 [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                 [0] + [1 for i in range(26)] + [0],
+                 [0 for i in range(28)]]
 
             return large_board
         else:
@@ -519,7 +580,7 @@ class Board():
     def total_enemy_print(self):
         for i in range(len(self)):
             for j in range(len(self[i])):
-                if type(self[i][j]) == Enemy:
+                if type(self[i][j]) == Agent:
                     print('Enemy at: ', i, j)
 
         print('-' * 50)
@@ -578,7 +639,7 @@ class Board():
             return self.pacman.score, self.pacman.lives, self.pacman.level + 1
         else:
             # (0, 3, 1)
-            return Powers.no_score, Powers.three_lives, Powers.level_one
+            return Pacman.no_score, Pacman.three_lives, Pacman.level_one
 
     def _game_continuation(self, y, x) -> None:
         ''' Checks if Pacman is ongoing to an enemy, if so restarts the level due to death.
@@ -600,9 +661,8 @@ class Board():
             self._update_board_square(y, x)
 
             if _DEBUG:
-                pass
                 # self.surrounded_print()
-                # self.pacman_and_enemy_print()
+                self.pacman_and_enemy_print()
                 # self.total_enemy_print()
                 # self.total_board_print()
 
@@ -624,3 +684,117 @@ class Board():
 
     def _game_over(self):
         self.game_over = True
+
+    def is_terminal(self):
+        # Check if the board state is terminal
+        # For example, if the game is over when all cells are filled or a player has won
+        # Implement your logic here
+        return self.check_for_gameover()
+
+    def utility(self, player):
+        # Calculate the utility of the board state for a given player
+        # Implement your logic here
+        if self.check_for_gameover():
+            if not self.pacman.out_of_lives():
+                return 0  # Game still in progress, return neutral utility
+            else:
+                return -1  # Pacman out of lives, game over, return negative utility
+        else:
+            return 0  # Game still in progress, return neutral utility
+
+    def actions(self):
+        # Generate all possible actions from the current board state
+        # For example, return all empty cells where the player can make a move
+        # Implement your logic here
+        empty_cells = []
+        for row in range(len(self.Gamestate)):
+            for col in range(len(self.Gamestate[0])):
+                if self.Gamestate[row][col] == 0:
+                    empty_cells.append((row, col))
+        return empty_cells
+
+    def result(self, action):
+        # Generate the board state that results from taking a given action
+        # Implement your logic here
+        row, col = action
+        player = 1  # Assuming the current player is always player 1
+        new_gamestate = [row[:]
+                         for row in self.Gamestate]  # Copy the current gamestate
+        # Update the cell with the player's move
+        new_gamestate[row][col] = player
+        new_board = Board(new_gamestate)
+        new_board._update_gamestate()  # Convert the gamestate to the updated gamestate
+        return new_board
+
+    def _update_gamestate(self):
+        ''' Updates the entire gamestate each time it is called. This function is in charge of
+            all the character object's movement, and game states as the game progresses. '''
+        y, x = self.pacman.return_location()
+        # pacman's movement is validated from current spot, and then pacman has a new location
+        self._validate_movement(y, x)
+        # validates if pacman picks up a boost
+        self._validate_pacman_state()
+        # enemies need to determine direction -> pacman's new location
+        self._validate_enemy_movement(y, x)
+        # checks for death, game over, and updates Pacman's previous board square
+        self._game_continuation(y, x)
+
+    def get_valid_neighbors(self, y, x):
+        '''Returns a list of valid neighboring cells from the given position (y, x).'''
+        valid_neighbors = []
+
+        # Check neighboring cells
+        for dy, dx in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            new_y, new_x = y + dy, x + dx
+            if self.is_valid_position(new_y, new_x) and not self.is_wall(new_y, new_x):
+                valid_neighbors.append((new_y, new_x))
+
+        return valid_neighbors
+
+    def is_valid_position(self, y, x):
+        '''Check if the given position (y, x) is within the bounds of the board.'''
+        return 0 <= y < len(self.Gamestate) and 0 <= x < len(self.Gamestate[0])
+
+    def is_wall(self, y, x):
+        '''Check if the given position (y, x) represents a wall.'''
+        return type(self.Gamestate[y][x]) == Wall
+
+    def manhattan_distance(self, start, goal):
+        """
+        Calculate the Manhattan distance between two points.
+
+        Args:
+            start (tuple): Coordinates of the starting point (x, y).
+            goal (tuple): Coordinates of the goal point (x, y).
+
+        Returns:
+            int: Manhattan distance between the two points.
+        """
+        return (abs(start[0] - goal[0]) + abs(start[1] - goal[1]))*3
+
+    def generate_heuristics(self):
+        """
+        Generate Manhattan distance heuristics for each cell in the board.
+
+        Args:
+            board (list of lists): The maze board.
+
+        Returns:
+            list of lists: Heuristics for each cell in the board.
+        """
+        goal = [self.pacman.y, self.pacman.x]  # Coordinates of the goal cell
+        heuristics = []
+
+        board=self.Gamestate
+
+        for col in range(len(board)):
+            heuristic_row = []
+            for row in range(len(board[0])):
+                if type(board[col][row]) == Wall:  # Walls are not considered
+                    heuristic_row.append(2147483647)
+                else:
+                    heuristic_row.append(self.manhattan_distance([col,row], goal))
+            heuristics.append(heuristic_row)
+
+        # print(heuristics)
+        return heuristics
