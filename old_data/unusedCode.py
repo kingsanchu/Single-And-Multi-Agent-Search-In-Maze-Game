@@ -1,3 +1,4 @@
+#Unused algorithm
 
 def dfs_search(self, board, start, endpoint_y, endpoint_x) -> deque:
     # Implementation of Depth-First Search algorithm

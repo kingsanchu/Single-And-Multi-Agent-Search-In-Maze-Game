@@ -57,23 +57,12 @@ class Agent(Character):
             # Use A* search algorithm
             if self.algorithm == "AStar":
                 return self.astar_search(board, start, endpoint_y, endpoint_x)
-            # Use Depth-first search algorithm
-            elif self.algorithm == "DFS":
-                return self.dfs_search(board, start, endpoint_y, endpoint_x)
             # Use Dijkstra's algorithm
             elif self.algorithm == "Dijkstra":
                 return self.dijkstra_search(board, start, endpoint_y, endpoint_x)
             # Use Breadth First Search's algorithm
             elif self.algorithm == "BFS":
                 return self.breadth_first_search(board, start, endpoint_y, endpoint_x)
-            if self.algorithm == "Adversarial Minimax":
-                return self.adversarial_minimax_search(board, start, endpoint_y, endpoint_x)
-            # Use Depth-first search algorithm
-            elif self.algorithm == "Alpha-beta Pruning":
-                return self.alpha_beta_pruning(board, start, endpoint_y, endpoint_x)
-            # Use Dijkstra's algorithm
-            elif self.algorithm == "Expectimax":
-                return self.expectimax(board, start, endpoint_y, endpoint_x)
             else:
                 raise ValueError
         else:
