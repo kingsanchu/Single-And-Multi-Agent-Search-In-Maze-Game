@@ -407,7 +407,7 @@ class Board():
                  [0, None, None, None, None, None, 1, 0, 0, None, 0, None, None, None,
                      None, None, None, 0, None, 0, 0, 1, None, None, None, None, None, 0],
                  #ghost row
-                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5,6,7,
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 1,1,6,
                      8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
                      0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
@@ -524,7 +524,7 @@ class Board():
                  [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7,
                      8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
                  [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0,
-                     0, 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None],
+                     0, 0, 0, 0, None, 0, 0, 1, 0, None, None, None, None, None],
                  [None, None, None, None, None, 0, 1, 0, 0, None, None, None, None, None,
                      None, None, None, None, None, 0, 0, 1, 0, None, None, None, None, None],
                  [None, None, None, None, None, 0, 1, 0, 0, None, 0, 0, 0, 0,
@@ -537,7 +537,7 @@ class Board():
                  [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
                      1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
                  [0, 3, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, None, 9,
-                     1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 3, 0, 0],
+                     1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 3, 0],
                  [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
                      0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
                  [0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
@@ -550,7 +550,7 @@ class Board():
                      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
                  [0] + [1 for i in range(26)] + [0],
                  [0 for i in range(28)]]
-
+            print(large_board)
             return large_board
         else:
             print("No maze size selected")

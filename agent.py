@@ -372,26 +372,32 @@ class Agent(Character):
     def dfs_search(self, board, start, endpoint_y, endpoint_x) -> deque:
         # Implementation of Depth-First Search algorithm
         came_from = {}
-        stack = [(start, None)]  # Stack (node, parent)
+        visited = set()
+        stack = [((self.y, self.x), None)]  # Stack (node, parent)
 
         while stack:
-            current, parent = stack.pop()
+            current, _ = stack.pop()
 
             if current == (endpoint_y, endpoint_x):
                 # Reconstruct path from start to endpoint
                 path = deque()
-                while current is not None:
-                    path.appendleft(current)
+                while current in came_from:
+                    path.appendleft((current[1], current[0]))
                     current = came_from[current]
                 return path
+            
+            if current in visited:
+                continue
+            
+            visited.add(current)
 
             for neighbor in board.get_valid_neighbors(current[0], current[1]):
-                if neighbor not in came_from:
+                if neighbor not in came_from and neighbor not in visited:
                     came_from[neighbor] = current
                     stack.append((neighbor, current))
 
         # No path found
-        return deque()
+        return None
 
     def dijkstra_search(self, board, start, endpoint_y, endpoint_x) -> deque:
         # Implementation of Dijkstra's Algorithm
