@@ -60,7 +60,7 @@ class MazeSizeAndDifficultyPage(tk.Frame):
         self.algorithm_var.set("BFS")  # Default algorithm
 
         # Add AStar and Dijkstra algorithms
-        algorithms = ["BFS", "AStar", "Dijkstra", "DFS"]
+        algorithms = ["BFS", "AStar", "Dijkstra"]
 
         for algorithm in algorithms:
             tk.Radiobutton(self, text=algorithm,
@@ -91,18 +91,14 @@ class MazeSizeAndDifficultyPage(tk.Frame):
             if selected_algorithm == "AStar":
                 print("Starting game with A* algorithm...")
             # Example: game.start_with_astar(agent)
-            elif selected_algorithm == "DFS":
-                print("Starting game with Depth-First Search algorithm...")
-
-            # Example: game.start_with_dfs(agent)
             elif selected_algorithm == "BFS":
                 print("Starting game with Breadth-First Search algorithm...")
             # Example: game.start_with_bfs(agent)
             elif selected_algorithm == "Dijkstra":
                 print("Starting game with Dijkstra's algorithm...")
 
-            Popen(["python", "main.py", "--algorithm", selected_algorithm, "--size", selected_maze_size])
-
+            Popen(["python", "main.py", "--algorithm",
+                  selected_algorithm, "--size", selected_maze_size])
 
     def show_main_menu(self):
         self.destroy()  # Destroy the current frame
