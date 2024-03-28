@@ -100,7 +100,6 @@ class Agent(Character):
     def blinky_movement(self, board, start,  pacman) -> None:
         ''' Blinky's movement is to directly chase Pacman on the board. '''
         path = self.determine_path(board, start,  pacman.y, pacman.x)
-        print(path)
         self.path_finding_direction(path)
 
     # Blinky Movement Functions #
