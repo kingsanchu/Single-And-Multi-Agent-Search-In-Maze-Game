@@ -1,6 +1,5 @@
 import tkinter as tk
 from subprocess import Popen
-from agent import Agent
 
 
 class MainMenu(tk.Frame):
@@ -13,13 +12,18 @@ class MainMenu(tk.Frame):
         self.root.geometry("500x300")  # Set the size of the main menu window
         # Set the background color of the main menu window
         self.root.configure(bg="#f0f0f0")
+        # Add welcome message
+        self.welcome_label = tk.Label(
+            self, text="Welcome to the game!", bg="#f0f0f0", font=("Arial", 14))
+        self.welcome_label.pack(side="top", pady=20)
+
 
     def create_widgets(self):
         # Create the "Start Game" button
         self.start_button = tk.Button(
             self, text="Start Game", command=self.show_maze_size_diff_page)
-        self.start_button.pack(side="top")
-        self.start_button.pack(side="top", pady=20)
+        self.start_button.pack(side="bottom")
+        self.start_button.pack(side="bottom", pady=20)
 
         # Create the "Quit" button
         self.quit_button = tk.Button(self, text="Quit", command=self.quit_game)
