@@ -75,3 +75,121 @@ Fixing trace path bug
 # 6/12
 
 Adding documentation on README and merging into main branch
+
+# 20/1
+
+Brainstorming gaming interface
+
+# 22/1
+
+Creating Start Menu for the game
+
+# 26/1
+
+Adding difficulty page to the start menu
+
+# 28/1
+
+Researching for multi-agent search building method
+
+# 2/2
+
+Adding padding to buttons
+
+# 5/2
+ 
+Prototyping agent to move around the maze
+
+# 7/2 
+
+Researching for expectimax algorithm
+
+# 12/2
+
+Defining position arguements for agents
+
+# 14/2
+
+Building settings for the pacman map
+
+# 16/2
+
+Setting up power ups basics
+
+# 18/2
+
+Setting power ups as reverting ghost's ability
+
+# 21/2
+
+Creating basic GUI for game interface
+
+# 24/2 
+
+Applying Pillow as the game's graphical interface plugin
+
+# 25/2
+
+Bugs fixing
+
+# 26/2
+
+Applying more Pillow graphical interface on agents
+
+# 28/2
+
+Applying new levels for the game
+
+# 1/3
+
+Creating more image for the game
+
+# 3/3 
+
+Modify the game's position argument for agents
+
+# 4/3
+
+Applying more agents
+
+# 5/3
+
+Debugging
+
+# 6/3
+
+Refactoring for better code understanding
+
+# 8/3 
+
+Adding difficulty for the game play, and adjusting window size for proper gameplay
+
+# 10/3
+
+Cleaning files and folders
+
+# 12/3
+
+Users can choose different algorithms instead of difficulty
+
+# 14/3
+
+Users can play with different maze size
+
+# 16/3
+
+Refining images
+
+# 17/3
+
+Refactoring to useful wordings
+
+# 21/3
+
+Debugging on the algorithms
+
+# 28/3
+
+Debugs and refining code and comments
+
+
