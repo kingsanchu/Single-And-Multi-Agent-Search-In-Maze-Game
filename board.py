@@ -5,11 +5,18 @@ from pickup import Pickup
 
 _DEBUG = False
 
-
 class Board():
     restricted_area = [(13, 11), (13, 16)]
 
     def __init__(self, width, height, images):
+        """
+        Initialize the Board object.
+
+        Args:
+            width (int): Width of the board.
+            height (int): Height of the board.
+            images: Images used for game objects.
+        """
         self._window_width = width
         self._window_height = height
         self.images = images
@@ -23,10 +30,13 @@ class Board():
 
         self.game_over = False
 
+    # Various setter methods
     def set_algorithm(self, algorithm):
+        """Set the algorithm used in the game."""
         self.algorithm = algorithm
 
     def set_maze_size(self, maze_size):
+        """Set the size of the maze."""
         self.maze_size = maze_size
 
     def restore_enemies_previous_square(self, enemy):
@@ -381,7 +391,8 @@ class Board():
 
     @classmethod
     def create_board(self, maze_size):
-    #     Sets up the board with the numbers, that will represent the objects
+        # Defining function of different maze size
+        # Sets up the board with the numbers, that will represent the objects
         if maze_size == "Small":
             small_board = \
                 [[0 for i in range(28)],
@@ -406,8 +417,8 @@ class Board():
                      None, None, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 1, 0],
                  [0, None, None, None, None, None, 1, 0, 0, None, 0, None, None, None,
                      None, None, None, 0, None, 0, 0, 1, None, None, None, None, None, 0],
-                 #ghost row
-                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5,6,7,
+                 # ghost row
+                 [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, None, 5, 6, 7,
                      8, None, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0, 0, 1, 0, 0, None, 0, 0, 0, 0, 0,
                      0, 0, 0, None, 0, 0, 1, 0, 0, 0, 0, 0, 0],
@@ -685,14 +696,12 @@ class Board():
         self.game_over = True
 
     def is_terminal(self):
-        # Check if the board state is terminal
-        # For example, if the game is over when all cells are filled or a player has won
-        # Implement your logic here
-        return self.check_for_gameover()
+        ''' Check if the board state is terminal
+            For example, if the game is over when all cells are filled or a player has won'''
 
     def utility(self, player):
-        # Calculate the utility of the board state for a given player
-        # Implement your logic here
+        ''' Calculate the utility of the board state for a given player'''
+
         if self.check_for_gameover():
             if not self.pacman.out_of_lives():
                 return 0  # Game still in progress, return neutral utility
@@ -702,9 +711,9 @@ class Board():
             return 0  # Game still in progress, return neutral utility
 
     def actions(self):
-        # Generate all possible actions from the current board state
-        # For example, return all empty cells where the player can make a move
-        # Implement your logic here
+        '''Generate all possible actions from the current board state
+            For example, return all empty cells where the player can make a move
+            Implement your logic here'''
         empty_cells = []
         for row in range(len(self.Gamestate)):
             for col in range(len(self.Gamestate[0])):
@@ -713,8 +722,8 @@ class Board():
         return empty_cells
 
     def result(self, action):
-        # Generate the board state that results from taking a given action
-        # Implement your logic here
+        ''' Generate the board state that results from taking a given action'''
+
         row, col = action
         player = 1  # Assuming the current player is always player 1
         new_gamestate = [row[:]
@@ -784,7 +793,7 @@ class Board():
         goal = [self.pacman.y, self.pacman.x]  # Coordinates of the goal cell
         heuristics = []
 
-        board=self.Gamestate
+        board = self.Gamestate
 
         for col in range(len(board)):
             heuristic_row = []
@@ -792,7 +801,8 @@ class Board():
                 if type(board[col][row]) == Wall:  # Walls are not considered
                     heuristic_row.append(2147483647)
                 else:
-                    heuristic_row.append(self.manhattan_distance([col,row], goal))
+                    heuristic_row.append(
+                        self.manhattan_distance([col, row], goal))
             heuristics.append(heuristic_row)
 
         # print(heuristics)
