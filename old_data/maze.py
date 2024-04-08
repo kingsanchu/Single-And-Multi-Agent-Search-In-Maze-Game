@@ -3,9 +3,9 @@ import datetime
 import csv
 import os
 from tkinter import *
-from COLOR import COLOR
-from agent import agent
-from textLabel import textLabel
+from old_data.COLOR import COLOR
+from agent import Agent
+from old_data.textLabel import textLabel
 from collections import deque
 
 
@@ -308,7 +308,7 @@ class maze:
                         i[2]), 'N': int(i[3]), 'S': int(i[4])}
             self.path = BFS((self.rows, self.cols))
         self._drawMaze(self.theme)
-        agent(self, *self._goal, shape='square',
+        Agent(self, *self._goal, shape='square',
               filled=True, color=COLOR.green)
         if saveMaze:
             dt_string = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
