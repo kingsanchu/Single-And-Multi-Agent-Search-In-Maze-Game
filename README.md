@@ -10,6 +10,6 @@ Depth-First Search : Run dfs.py
 
 Dijkstra's Algorithm : Run dijksta.py
 
-# Video for the interim report : (Video should be also included on GitLab)
+# Video for the final report :
 
-https://youtu.be/uW8Jh-RPuGg
+https://youtu.be/SqXv7jhdpxo
