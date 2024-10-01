@@ -1,14 +1,8 @@
 # Single-And-Multi-Agent-Search-In-Maze-Game
 
-To run the code, you can run the maze for different algorithms on each file. It should display the GUI immediately without any package instaliation.
+To run the code, you can run the maze for different algorithms on each file. 
 
-A* Search : Run a_star_search
-
-Breadth-First Search : Run bfs.py
-
-Depth-First Search : Run dfs.py
-
-Dijkstra's Algorithm : Run dijksta.py
+By downloading the tkinter package(pip install tk) and the Pillow package(pip install pillow) It should display the GUI for the game and runs smoothly.
 
 # Video for the final report :
 
